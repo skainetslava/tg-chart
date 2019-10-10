@@ -101,7 +101,7 @@
     background: white;
     width: 100%;
     opacity: 0;
-    transition: 0.1s;
+    transition: 0.1;
   }
 </style>
 
