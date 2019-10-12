@@ -3,6 +3,7 @@
   import { data } from "./data.js";
 
   let canvas;
+  let tooltip;
 
   const xData = data.columns[0].slice(1);
   const yData = data.columns[1].slice(1);
@@ -13,14 +14,16 @@
   let initialPositionX = 0;
   let isMouseDown = false;
 
-  $: for (let i = 0; i < xData.length; i++) {
-    columns.push(i * 30 + currentPositionX % 30);
+  $: {
+    columns = [];
+    for (let i = 0; i < xData.length; i++) {
+      columns = [...columns, i * 30 + (currentPositionX % 30)];
+    }
   }
 
   onMount(() => {
     if (canvas.getContext) {
-      let ctx = canvas.getContext("2d");
-
+      const ctx = canvas.getContext("2d");
       drawRectangle(ctx);
       drawAxis(ctx);
       drawTextX(ctx);
@@ -28,11 +31,9 @@
   });
 
   const drawRectangle = ctx => {
-    for (var i = 0; i < xData.length; i++) {
-      ctx.fillStyle = "#F34C44";
-      const dp = yData[i];
-
-      ctx.fillRect(i * 30, 500 - dp * 5 - 40, 30, dp * 5);
+    for (let i = 0; i < xData.length; i++) {
+      ctx.fillStyle = "#64aded";
+      ctx.fillRect(i * 30, 500 - yData[i] * 5 - 40, 30, yData[i] * 5);
     }
   };
 
@@ -47,34 +48,63 @@
     }
   };
 
+  const formateDate = (value, type) => {
+    const day = new Date(value).getDate();
+    const month = new Date(value).toLocaleString("en", {
+      month: type
+    });
+
+    return `${day} ${month}`;
+  };
+
   const drawTextX = ctx => {
     ctx.fillStyle = "black";
-
     for (let i = 0; i < xData.length; i++) {
       if (i % 5 === 0) {
-        const day = new Date(xData[i]).getDate();
-        const month = new Date(xData[i]).toLocaleString("en", {
-          month: "short"
-        });
-
-        const date = `${day} ${month}`;
+        const date = formateDate(xData[i], "short");
+        ctx.font = "14px Trebuchet MS";
         ctx.fillText(date, 30 + i * 30, 480);
       }
     }
   };
 
   const getLimitValue = x => {
-    columns.forEach((column, i) => {
-      if (column < x && (!columns[i + 1] || x < columns[i + 1])) {
-        limit = column + 30;
-      }
-    });
+    const index = findColumnIndex(x);
+    limit = columns[index] + 30;
+  };
+
+  const findColumnIndex = x => {
+    return columns.findIndex(
+      (column, i) => column < x && (!columns[i + 1] || x < columns[i + 1])
+    );
+  };
+
+  const createTooltip = e => {
+    const index = findColumnIndex(e.clientX);
+    const dateColumn = formateDate(xData[index], "long");
+    const viewsColumn = yData[index];
+
+    tooltip = {
+      x: e.clientX,
+      y: e.clientY,
+      date: dateColumn,
+      views: viewsColumn
+    };
+  };
+
+  const handleMouseEnter = e => {
+    createTooltip(e);
   };
 
   const handleMouseMove = e => {
     if (isMouseDown) {
-      let translate = e.clientX - initialPositionX;
-      currentPositionX = translate <= 0 ? translate : 0;
+      const translate = -1 * (e.clientX - initialPositionX);
+      const invisibleWidth = canvas.clientWidth - 800;
+
+      currentPositionX =
+        translate >= invisibleWidth ? -invisibleWidth : translate;
+      currentPositionX = translate <= 0 ? 0 : -translate;
+      createTooltip({ clientX: e.clientX });
     }
     getLimitValue(e.clientX);
   };
@@ -90,11 +120,14 @@
 </script>
 
 <style>
+  :global(html) {
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+  }
   .app {
     position: relative;
     height: 505px;
     width: 800px;
-    transition: 0.1s;
     overflow: hidden;
   }
 
@@ -125,6 +158,22 @@
   .cnvs {
     position: relative;
   }
+  .tooltip {
+    position: absolute;
+    padding: 8px;
+    background: #fff;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0);
+    border: 1px solid rgb(238, 227, 227);
+    border-radius: 10px;
+  }
+
+  .text {
+    font-weight: 600;
+  }
+  p {
+    margin: 0;
+    padding: 0;
+  }
 </style>
 
 <div
@@ -137,12 +186,22 @@
   {currentPositionX}
   <canvas
     bind:this={canvas}
+    on:mouseenter={handleMouseEnter}
     class="cnvs"
     width="1300px"
     height="504px"
     style="transform: translateX({currentPositionX}px);" />
+
   <div class="wrapper-left" style="transform: translateX({limit}px);" />
   <div
     class="wrapper-right"
     style="transform: translateX({limit - 30 - 800}px);" />
+
+  {#if tooltip}
+    <div class="tooltip" style="top: 50px; left: {tooltip.x - 65}px">
+      <p class="text">{tooltip.date}</p>
+      <p>Views: {tooltip.views}</p>
+    </div>
+  {/if}
+
 </div>
