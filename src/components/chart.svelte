@@ -153,6 +153,10 @@
   const handleMouseEnter = e => {
     renderTooltip(e);
   };
+
+  const moveSlider = ({ detail: { position } }) => {
+    currentPositionX = -position;
+  };
 </script>
 
 <style>
@@ -224,7 +228,7 @@
     bind:this={canvas}
     on:mouseenter={handleMouseEnter}
     class="cnvs"
-    width="{xData.length * 30}"
+    width={xData.length * 30}
     height="504px"
     style="transform: translateX({currentPositionX}px);" />
 
@@ -240,5 +244,4 @@
     </div>
   {/if}
 </div>
-  <Map />
-
+<Map positionChart={currentPositionX} on:move={moveSlider} />
