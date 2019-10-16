@@ -1,31 +1,32 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate } from "svelte";
   import { data } from "../data.js";
+  import { ratio } from "../store/stats.js";
   import { formateDate } from "../utils/formateDate.js";
   import Map from "./map.svelte";
 
-  let canvas;
-  let tooltip;
+  let canvasRef;
+  let chartRef;
 
   const xData = data.columns[0].slice(1);
   const yData = data.columns[1].slice(1);
+  const widthColumn = 30;
+  const widthCanvas = xData.length * widthColumn;
 
-  let columns = [];
+  let tooltip;
   let limit = 0;
   let currentPositionX = 0;
   let initialPositionX = 0;
   let isMouseDown = false;
+  let positionXMap = 0;
+  let offset = 0;
+  let currentColumn;
 
-  $: {
-    columns = [];
-    for (let i = 0; i < xData.length; i++) {
-      columns = [...columns, i * 30 + currentPositionX];
-    }
-  }
+  $: columns = xData.map((val, i) => i * widthColumn + currentPositionX);
 
   onMount(() => {
-    if (canvas.getContext) {
-      const ctx = canvas.getContext("2d");
+    if (canvasRef.getContext) {
+      const ctx = canvasRef.getContext("2d");
       drawRectangle(ctx);
       drawAxis(ctx);
       drawTextX(ctx);
@@ -33,10 +34,19 @@
     }
   });
 
+  afterUpdate(() => {
+    offset = chartRef.offsetLeft;
+  });
+
   const drawRectangle = ctx => {
     for (let i = 0; i < xData.length; i++) {
       ctx.fillStyle = "#64aded";
-      ctx.fillRect(i * 30, 500 - yData[i] * 5 - 40, 30, yData[i] * 5);
+      ctx.fillRect(
+        i * widthColumn,
+        500 - yData[i] * 5 - 40,
+        widthColumn,
+        yData[i] * 5
+      );
     }
   };
 
@@ -45,19 +55,20 @@
       ctx.fillStyle = "#EAEBF3";
       ctx.lineWidth = 0.3;
       ctx.beginPath();
-      ctx.moveTo(30, 92 * i);
-      ctx.lineTo(xData.length * 30, 92 * i);
+      ctx.moveTo(widthColumn, 92 * i);
+      ctx.lineTo(widthCanvas, 92 * i);
       ctx.stroke();
     }
   };
 
   const drawTextX = ctx => {
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#a6a6a6";
     for (let i = 0; i < xData.length; i++) {
       if (i % 5 === 0) {
         const date = formateDate(xData[i], "short");
-        ctx.font = "14px Trebuchet MS";
-        ctx.fillText(date, 30 + i * 30, 480);
+        ctx.font = "14px Roboto";
+        ctx.we;
+        ctx.fillText(date, widthColumn * (i + 1), 480);
       }
     }
   };
@@ -72,19 +83,21 @@
   };
 
   const getLimitBorder = x => {
-    const index = findColumnIndex(x);
-    limit = columns[index] + 30;
+    if (!currentColumn || !isMouseDown) {
+      currentColumn = findColumnIndex(x);
+    }
+    limit = currentColumn * 30 + widthColumn + currentPositionX;
   };
 
   const findColumnIndex = x => {
+    const position = x - offset;
     return columns.findIndex(
-      (column, i) =>
-        column + 10 < x && (!columns[i + 1] || x < columns[i + 1] + 10)
+      (column, i) => column <= position && position <= columns[i + 1]
     );
   };
 
   const checkTooltipBorders = x => {
-    let rightX = x;
+    let rightX = x - offset;
 
     if (rightX < 100) {
       rightX = 100;
@@ -96,17 +109,29 @@
     return rightX;
   };
 
-  const renderTooltip = e => {
+  const updateDataTooltip = e => {
     const index = findColumnIndex(e.clientX);
     const dateColumn = formateDate(xData[index], "long");
     const viewsColumn = yData[index];
 
     tooltip = {
-      x: checkTooltipBorders(e.clientX),
-      y: e.clientY,
+      ...tooltip,
       date: dateColumn,
       views: viewsColumn
     };
+  };
+
+  const updatePositionTooltip = e => {
+    tooltip = {
+      ...tooltip,
+      x: checkTooltipBorders(e.clientX),
+      y: e.clientY
+    };
+  };
+
+  const renderTooltip = e => {
+    updateDataTooltip(e);
+    updatePositionTooltip(e);
   };
 
   const checkChartBorders = (x, translate, widthChart) => {
@@ -128,14 +153,17 @@
   const handleMouseMove = e => {
     if (isMouseDown) {
       const translate = -1 * (e.clientX - initialPositionX);
-      const invisibleWidth = xData.length * 30 - 800;
 
       currentPositionX = checkChartBorders(
         e.clientX,
         translate,
-        invisibleWidth
+        widthCanvas - 800
       );
-      renderTooltip({ clientX: e.clientX });
+
+      positionXMap = currentPositionX / $ratio;
+      updatePositionTooltip(e);
+    } else {
+      renderTooltip(e);
     }
     getLimitBorder(e.clientX);
   };
@@ -154,15 +182,19 @@
     renderTooltip(e);
   };
 
-  const moveSlider = ({ detail: { position } }) => {
-    currentPositionX = -position;
+  const moveSlider = ({ detail }) => {
+    currentPositionX = -detail.positionXMap * $ratio;
   };
 </script>
 
 <style>
-  :global(html) {
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
+  .title {
+    margin-bottom: 48px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .chart-one {
+    margin: 0 auto;
   }
   .chart {
     position: relative;
@@ -171,77 +203,79 @@
     overflow: hidden;
   }
 
-  .wrapper-left {
-    position: absolute;
-    height: 100%;
-    width: 800px;
-    left: 0;
-    top: 0;
-    background: white;
-    opacity: 0;
-  }
-
-  .chart:hover .wrapper-left {
+  .chart:hover .wrapper {
     opacity: 0.3;
   }
-  .chart:hover .wrapper-right {
-    opacity: 0.3;
-  }
-  .wrapper-right {
+  .wrapper {
     position: absolute;
-    height: 100%;
     top: 0;
-    background: white;
+    height: 100%;
     width: 100%;
     opacity: 0;
+    background: white;
+    transition: opacity 0.3s;
   }
-  .cnvs {
-    position: relative;
+
+  .left {
+    left: 0;
   }
   .tooltip {
     position: absolute;
-    padding: 8px;
+    padding: 8px 12px;
     background: #fff;
     box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0);
     border: 1px solid rgb(238, 227, 227);
     border-radius: 10px;
   }
-
-  .text {
+  .date {
+    line-height: 1.5em;
     font-weight: 600;
   }
-  p {
-    margin: 0;
-    padding: 0;
+  .views {
+    font-weight: 600;
+    color: #64aded;
   }
 </style>
 
-<div
-  class="chart"
-  on:mousemove={handleMouseMove}
-  on:mousedown={handleMouseDown}
-  on:mouseleave={handleMouseLeave}
-  on:mouseup={() => (isMouseDown = false)}
-  style={isMouseDown ? 'cursor: grabbing' : 'cursor: grab'}>
-
-  <canvas
-    bind:this={canvas}
-    on:mouseenter={handleMouseEnter}
-    class="cnvs"
-    width={xData.length * 30}
-    height="504px"
-    style="transform: translateX({currentPositionX}px);" />
-
-  <div class="wrapper-left" style="transform: translateX({limit}px);" />
+<div class="chart-one">
+  <p class="title">Chart one</p>
   <div
-    class="wrapper-right"
-    style="transform: translateX({limit - 30 - 800}px);" />
+    class="chart"
+    bind:this={chartRef}
+    on:mousemove={handleMouseMove}
+    on:mousedown={handleMouseDown}
+    on:mouseleave={handleMouseLeave}
+    on:mouseup={() => (isMouseDown = false)}
+    style={isMouseDown ? 'cursor: grabbing' : 'cursor: grab'}>
 
-  {#if tooltip}
-    <div class="tooltip" style="top: 50px; left: {tooltip.x - 65}px">
-      <p class="text">{tooltip.date}</p>
-      <p>Views: {tooltip.views}</p>
-    </div>
-  {/if}
+    <canvas
+      bind:this={canvasRef}
+      on:mouseover={handleMouseEnter}
+      class="cnvs"
+      width={widthCanvas}
+      height="504px"
+      style="transform: translateX({currentPositionX}px);" />
+
+    <div class="wrapper left" style="transform: translateX({limit}px);" />
+    <div
+      class="wrapper right"
+      style="transform: translateX({limit - widthColumn - 800}px);" />
+
+    {#if tooltip}
+      <div class="tooltip" style="top: 50px; left: {tooltip.x - 65}px">
+        <p class="date">{tooltip.date}</p>
+        <p>
+          Views:
+          <span class="views">{tooltip.views}</span>
+        </p>
+      </div>
+    {/if}
+  </div>
+
+  <Map
+    positionChart={positionXMap}
+    on:move={moveSlider}
+    columnChart={widthColumn}
+    {xData}
+    {yData} />
 </div>
-<Map positionChart={currentPositionX} on:move={moveSlider} />

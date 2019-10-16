@@ -4,10 +4,32 @@
 
 <style>
   :global(html) {
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
+    font-family: "Roboto", Arial, sans-serif;
+  }
+  .app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 20%;
+  }
+  .describe {
+    margin-bottom: 64px;
+  }
+  h3 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 16px;
   }
 </style>
 
-<Chart />
-
+<div class="app">
+  <div class="describe">
+    <h3>Chart Contest</h3>
+    <p>These charts are made with canvas.</p>
+  </div>
+  <Chart />
+</div>
