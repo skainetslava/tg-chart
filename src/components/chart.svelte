@@ -1,18 +1,19 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
   import { data } from "../data.js";
-  import { ratio } from "../store/stats.js";
+  import { ratio, ratioMap } from "../store/stats.js";
   import { formateDate } from "../utils/formateDate.js";
   import Map from "./map.svelte";
 
   let canvasRef;
   let chartRef;
 
+  let ctx;
+
   const xData = data.columns[0].slice(1);
   const yData = data.columns[1].slice(1);
-  const widthColumn = 30;
-  const widthCanvas = xData.length * widthColumn;
 
+  let widthColumn = 30;
   let tooltip;
   let limit = 0;
   let currentPositionX = 0;
@@ -22,21 +23,36 @@
   let offset = 0;
   let currentColumn;
 
+  const widthCanvas = xData.length * widthColumn;
+
   $: columns = xData.map((val, i) => i * widthColumn + currentPositionX);
+
+  let end;
+  let start;
+
+  $: {
+    const dataArray = xData.map((val, i) => i * widthColumn);
+    start = findColumnIndex(-currentPositionX, dataArray);
+    end = start + Math.round(1000 / widthColumn);
+  }
 
   onMount(() => {
     if (canvasRef.getContext) {
-      const ctx = canvasRef.getContext("2d");
-      drawRectangle(ctx);
-      drawAxis(ctx);
-      drawTextX(ctx);
-      drawTextY(ctx);
+      ctx = canvasRef.getContext("2d");
+      draw(ctx);
     }
   });
 
   afterUpdate(() => {
     offset = chartRef.offsetLeft;
   });
+
+  const draw = () => {
+    drawRectangle(ctx);
+    drawAxis(ctx);
+    drawTextX(ctx);
+    drawTextY(ctx);
+  };
 
   const drawRectangle = ctx => {
     for (let i = 0; i < xData.length; i++) {
@@ -86,13 +102,13 @@
     if (!currentColumn || !isMouseDown) {
       currentColumn = findColumnIndex(x);
     }
-    limit = currentColumn * 30 + widthColumn + currentPositionX;
+    limit = currentColumn * widthColumn + widthColumn + currentPositionX;
   };
 
-  const findColumnIndex = x => {
+  const findColumnIndex = (x, dataArray = columns) => {
     const position = x - offset;
-    return columns.findIndex(
-      (column, i) => column <= position && position <= columns[i + 1]
+    return dataArray.findIndex(
+      (column, i) => column <= position && position <= dataArray[i + 1]
     );
   };
 
@@ -102,8 +118,8 @@
     if (rightX < 100) {
       rightX = 100;
     }
-    if (rightX > 700) {
-      rightX = 700;
+    if (rightX > 940) {
+      rightX = 940;
     }
 
     return rightX;
@@ -157,9 +173,8 @@
       currentPositionX = checkChartBorders(
         e.clientX,
         translate,
-        widthCanvas - 800
+        widthCanvas - 1000
       );
-
       positionXMap = currentPositionX / $ratio;
       updatePositionTooltip(e);
     } else {
@@ -185,6 +200,16 @@
   const moveSlider = ({ detail }) => {
     currentPositionX = -detail.positionXMap * $ratio;
   };
+
+  const handleChangeScale = ({ detail }) => {
+    if (!ctx) {
+      return;
+    }
+
+    widthColumn = 1000 / detail.ratio;
+    ctx.clearRect(0, 0, widthCanvas, 504);
+    draw(ctx);
+  };
 </script>
 
 <style>
@@ -199,10 +224,9 @@
   .chart {
     position: relative;
     height: 505px;
-    width: 800px;
+    width: 1000px;
     overflow: hidden;
   }
-
   .chart:hover .wrapper {
     opacity: 0.3;
   }
@@ -235,10 +259,20 @@
     font-weight: 600;
     color: #64aded;
   }
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
 
 <div class="chart-one">
-  <p class="title">Chart one</p>
+  <div class="header">
+    <p class="title">Chart one</p>
+    <p>
+      {formateDate(xData[start], 'short')} - {formateDate(xData[end], 'short')}
+    </p>
+  </div>
   <div
     class="chart"
     bind:this={chartRef}
@@ -259,7 +293,7 @@
     <div class="wrapper left" style="transform: translateX({limit}px);" />
     <div
       class="wrapper right"
-      style="transform: translateX({limit - widthColumn - 800}px);" />
+      style="transform: translateX({limit - widthColumn - 1000}px);" />
 
     {#if tooltip}
       <div class="tooltip" style="top: 50px; left: {tooltip.x - 65}px">
@@ -276,6 +310,7 @@
     positionChart={positionXMap}
     on:move={moveSlider}
     columnChart={widthColumn}
+    on:changeScale={handleChangeScale}
     {xData}
     {yData} />
 </div>

@@ -10,7 +10,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 16px 20%;
   }
   .describe {
     margin-bottom: 64px;
