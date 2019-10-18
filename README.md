@@ -1,2 +1,2 @@
-#tg contest
+#tg chart contest
 wip
