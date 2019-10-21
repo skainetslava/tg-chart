@@ -12,7 +12,7 @@
     flex-direction: column;
   }
   .describe {
-    margin-bottom: 64px;
+    margin: 64px;
   }
   h3 {
     font-size: 21px;

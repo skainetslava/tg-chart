@@ -13,27 +13,31 @@
   let canvasRef;
   let mapRef;
 
+  const widthBorder = 5;
   const widthColumn = 1000 / xData.length;
 
-  let scale = 300;
   let isMouseDown = false;
+  let isMovingRightBorder = false;
+  let isMovingLeftBorder = false;
+
+  let scale = 300;
   let offset = 0;
-  let value;
 
   let leftBorder = 0;
-  let rightBorder = leftBorder + scale;
+  let rightBorder = leftBorder + scale + 15;
+  let distance;
 
-  $: currentPositionX = -positionChart;
   $: scale = $ratioMap * widthColumn;
+  $: leftBorder = -positionChart || 0;
 
   onMount(() => {
     if (!canvasRef.getContext) {
-      return null;
+      return;
     }
-    ratio.update(() => columnChart / widthColumn);
-
     const ctx = canvasRef.getContext("2d");
     drawRectangle(ctx);
+
+    ratio.update(() => columnChart / widthColumn);
   });
 
   afterUpdate(() => {
@@ -54,71 +58,84 @@
   };
 
   const checkChartBorders = x => {
-    let position = x - offset;
-
-    if (position <= 0) {
+    if (x < 0) {
       return 0;
     }
-    if (position >= 800) {
-      return 800;
+    if (x + scale > 1000) {
+      return 990 - scale;
     }
 
-    return position;
+    return x;
   };
 
-  const handleMouseMove = e => {
+  const checkRightSlider = x => {
+    if (rightBorder - leftBorder < 150 && x < rightBorder) {
+      x = rightBorder;
+    }
+    return x;
+  };
+
+  const checkLeftSlider = x => {
+    if (rightBorder - leftBorder < 150 && x > leftBorder) {
+      x = leftBorder;
+    }
+    return x;
+  };
+
+  const handleSliderMove = e => {
     if (!isMouseDown) {
       return;
     }
 
-    currentPositionX = checkChartBorders(e.clientX - 50);
-    ratio.update(() => 30 / widthColumn);
+    const x = e.clientX;
 
-    rightBorder = currentPositionX + scale;
-    leftBorder = currentPositionX;
+    if (!distance) {
+      distance = x - leftBorder;
+    }
 
-    dispatch("move", { positionXMap: currentPositionX });
+    leftBorder = checkChartBorders(x - distance);
+    rightBorder = checkChartBorders(leftBorder + scale + widthBorder);
+
+    dispatch("move", { positionXMap: leftBorder });
   };
 
-  const handleChange = e => {
-    ratioMap.update(() => value / widthColumn);
-    dispatch("changeScale", { ratio: value / widthColumn });
+  const handleDownRightBorder = e => {
+    isMovingRightBorder = true;
   };
 
-  const handleMoveRightBorder = e => {
-    isMouseDown = true;
+  const handleDownLeftBorder = e => {
+    isMovingLeftBorder = true;
   };
 
-  const handleMoveLeftBorder = e => {
-    isMouseDown = true;
-    const x = e.clientX - offset - 15;
+  const handleMoveBorder = e => {
+    if (isMouseDown) {
+      handleSliderMove(e);
+    }
 
-    ratioMap.update(() => x / widthColumn);
-    dispatch("changeScale", { ratio: x / widthColumn });
-  };
-
-  const handleMouseMoveByRightBorder = e => {
-    if (!isMouseDown) {
+    if (!isMovingRightBorder && !isMovingLeftBorder) {
       return;
     }
-    const x = e.clientX - offset - 15;
-    const ratio = (rightBorder - leftBorder) / widthColumn;
 
-    rightBorder = x;
-    ratioMap.update(() => ratio);
-    dispatch("changeScale", { ratio });
+    if (isMovingRightBorder) {
+      rightBorder = checkRightSlider(e.clientX - offset);
+    } else {
+      leftBorder = checkLeftSlider(e.clientX - offset - 15);
+    }
+
+    const widthSlider = (rightBorder - widthBorder - leftBorder) / widthColumn;
+    const newRatio = columnChart / widthColumn;
+
+    ratioMap.update(() => widthSlider);
+    ratio.update(() => newRatio);
+
+    dispatch("changeScale", { leftBorder, newRatio });
   };
 
-  const handleMouseMoveByLeftBorder = e => {
-    if (!isMouseDown) {
-      return;
-    }
-    const x = e.clientX - offset - 15;
-    const ratio = (rightBorder - leftBorder) / widthColumn;
-
-    leftBorder = x;
-    ratioMap.update(() => ratio);
-    dispatch("changeScale", { ratio });
+  const resetMouseActions = () => {
+    isMovingLeftBorder = false;
+    isMovingRightBorder = false;
+    isMouseDown = false;
+    distance = null;
   };
 </script>
 
@@ -147,51 +164,77 @@
 
   .handle {
     position: absolute;
-    border: 1px solid #000;
+    border: 3px solid #c0d1e1;
     border-radius: 5px;
-    height: 95%;
-    width: 312px;
+    height: calc(100% - 6px);
     z-index: 2;
     cursor: grab;
   }
 
   .border {
     position: absolute;
+    width: 12px;
+    background: #c0d1e1;
     height: 100%;
-    width: 30px;
-    background: blue;
+    cursor: w-resize;
+
     z-index: 2;
+  }
+
+  .border_left {
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+    left: 0;
+  }
+  .border_left::after,
+  .border_right::after {
+    position: absolute;
+    background: white;
+    width: 3px;
+    border-radius: 4px;
+    height: 15px;
+    left: 5px;
+    top: 17px;
+    display: block;
+    content: " ";
+    z-index: 1;
+    cursor: w-resize;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .border_right {
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
   }
 </style>
 
-<div class="map-wrapper" bind:this={mapRef}>
+<svelte:window
+  on:mousemove={handleMoveBorder}
+  on:mouseup={resetMouseActions}
+  on:mouseenter={resetMouseActions} />
 
+<div class="map-wrapper" bind:this={mapRef}>
   <div
     class="mask right"
-    style="transform: translateX({currentPositionX + scale}px); width: {1000 - scale - currentPositionX}px" />
+    style="transform: translateX({leftBorder + scale + widthBorder}px); width: {1000 - scale - leftBorder}px" />
   <div
     class="mask left"
-    style="transform: translateX({currentPositionX - 1000}px);" />
+    style="transform: translateX({leftBorder - 1000}px);" />
 
   <div
-    on:mousemove={handleMouseMove}
     on:mousedown={() => (isMouseDown = true)}
-    on:mouseenter={() => (isMouseDown = false)}
-    on:mouseup={() => (isMouseDown = false)}
     class="handle"
-    style="transform: translateX({leftBorder}px); width: {scale}px" />
+    style="transform: translateX({leftBorder + widthBorder}px); width: {scale}px" />
 
   <div
-    class="border"
+    class="border border_left"
     style="transform: translateX({leftBorder}px);"
-    on:mousedown={handleMoveLeftBorder}
-    on:mousemove={handleMouseMoveByLeftBorder} />
+    on:mousedown={handleDownLeftBorder} />
   <div
-    class="border"
-    style="transform: translateX({rightBorder}px);"
-    on:mousedown={handleMoveRightBorder}
-    on:mousemove={handleMouseMoveByRightBorder}
-    on:mouseup={() => (isMouseDown = false)} />
+    class="border border_right"
+    style="transform: translateX({leftBorder + scale + widthBorder}px);"
+    on:mousedown={handleDownRightBorder} />
 
   <canvas
     bind:this={canvasRef}

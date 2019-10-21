@@ -24,16 +24,16 @@
   let currentColumn;
 
   const widthCanvas = xData.length * widthColumn;
+  const dataArray = xData.map((val, i) => i * widthColumn);
 
   $: columns = xData.map((val, i) => i * widthColumn + currentPositionX);
 
-  let end;
-  let start;
+  let endDay;
+  let startDay;
 
   $: {
-    const dataArray = xData.map((val, i) => i * widthColumn);
-    start = findColumnIndex(-currentPositionX, dataArray);
-    end = start + Math.round(1000 / widthColumn);
+    startDay = Math.round(-currentPositionX / widthColumn);
+    endDay = startDay + Math.round(1000 / widthColumn);
   }
 
   onMount(() => {
@@ -146,6 +146,10 @@
   };
 
   const renderTooltip = e => {
+    if (!chartRef.contains(e.target)) {
+      tooltip = null;
+      return;
+    }
     updateDataTooltip(e);
     updatePositionTooltip(e);
   };
@@ -198,7 +202,8 @@
   };
 
   const moveSlider = ({ detail }) => {
-    currentPositionX = -detail.positionXMap * $ratio;
+    const { positionXMap } = detail;
+    currentPositionX = -positionXMap * $ratio;
   };
 
   const handleChangeScale = ({ detail }) => {
@@ -206,7 +211,11 @@
       return;
     }
 
-    widthColumn = 1000 / detail.ratio;
+    const { leftBorder } = detail;
+
+    widthColumn = 1000 / $ratioMap;
+    currentPositionX = -leftBorder * $ratio;
+
     ctx.clearRect(0, 0, widthCanvas, 504);
     draw(ctx);
   };
@@ -270,7 +279,7 @@
   <div class="header">
     <p class="title">Chart one</p>
     <p>
-      {formateDate(xData[start], 'short')} - {formateDate(xData[end], 'short')}
+      {formateDate(xData[startDay], 'short')} - {formateDate(xData[endDay], 'short')}
     </p>
   </div>
   <div
