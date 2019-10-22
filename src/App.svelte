@@ -1,6 +1,6 @@
 <script>
   import BarChart from "./components/barChart.svelte";
-  import Diagram from "./components/Diagram.svelte";
+  import Diagram from "./components/diagram.svelte";
 </script>
 
 <style>
