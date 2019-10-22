@@ -72,7 +72,7 @@
       ctx.lineWidth = 0.3;
       ctx.beginPath();
       ctx.moveTo(widthColumn, 92 * i);
-      ctx.lineTo(widthCanvas * 3, 92 * i);
+      ctx.lineTo(widthCanvas * 3 , 92 * i);
       ctx.stroke();
     }
   };

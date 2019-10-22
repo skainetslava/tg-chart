@@ -1,5 +1,6 @@
 <script>
   import BarChart from "./components/barChart.svelte";
+  import Diagram from "./components/Diagram.svelte";
 </script>
 
 <style>
@@ -31,4 +32,5 @@
     <p>These charts are made with canvas.</p>
   </div>
   <BarChart />
+  <Diagram />
 </div>
