@@ -1,9 +1,9 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
   import { data } from "../data.js";
-  import { ratio, ratioMap } from "../store/stats.js";
+  import { ratio, theme } from "../store/stats.js";
   import { formateDate } from "../utils/formateDate.js";
-  import DiagramMap from "./diagramMap.svelte";
+  import Map from "./Map.svelte";
 
   let canvasRef;
   let chartRef;
@@ -21,6 +21,7 @@
   let isMouseDown = false;
   let positionXMap = 0;
   let offset = 0;
+  let previousIndex;
   let currentColumn;
 
   const widthCanvas = xData.length * widthColumn;
@@ -97,6 +98,36 @@
     }
   };
 
+  const drawMap = ctx => {
+    const widthColumn = 1000 / xData.length;
+    for (let i = 0; i < xData.length; i++) {
+      const heightColumn = yData[i] * 0.5;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(i * widthColumn, 50 - heightColumn);
+      ctx.lineTo((i + 1) * widthColumn, 50 - yData[i + 1] * 0.5);
+      ctx.strokeStyle = "#C9AF4F";
+      ctx.stroke();
+    }
+  };
+
+  const drawLine = index => {
+    ctx.beginPath();
+    ctx.moveTo(index * widthColumn, 0);
+    ctx.lineTo(index * widthColumn, 504);
+    ctx.lineWidth = 0.3;
+   ctx.strokeStyle = $theme === "light" ? "#000" : "#fff";
+    ctx.stroke();
+  };
+
+  const drawPoint = index => {
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(index * widthColumn, 500 - yData[index] * 5, 5, 0, Math.PI * 2);
+    ctx.strokeStyle = $theme === "light" ? "#C9AF4F" : "#fff";
+    ctx.stroke();
+  };
+
   const getLimitBorder = x => {
     if (!currentColumn || !isMouseDown) {
       currentColumn = findColumnIndex(x);
@@ -168,30 +199,19 @@
 
     return position;
   };
-  let prev;
-  const drawPoint = e => {
+
+  const drawCurrenValue = e => {
     const index = findColumnIndex(e.clientX);
 
-    if (prev === index) {
+    if (previousIndex === index) {
       return;
     }
-    prev = index;
+    previousIndex = index;
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
     draw(ctx);
-
-    ctx.beginPath();
-    ctx.moveTo(index * widthColumn, 0);
-    ctx.lineTo(index * widthColumn, 504);
-     ctx.lineWidth = 0.3;
-    ctx.strokeStyle = "#000";
-    ctx.stroke();
-
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(index * widthColumn, 500 - yData[index] * 5, 5, 0, Math.PI * 2);
-    ctx.strokeStyle = "#C9AF4F";
-    ctx.stroke();
+    drawPoint(index);
+    drawLine(index);
   };
 
   const handleMouseMove = e => {
@@ -208,7 +228,7 @@
     } else {
       renderTooltip(e);
     }
-    drawPoint(e);
+    drawCurrenValue(e);
     getLimitBorder(e.clientX);
   };
 
@@ -230,7 +250,6 @@
     const { positionXMap } = detail;
     currentPositionX = -positionXMap * $ratio;
   };
-
   const handleChangeScale = ({ detail }) => {
     if (!ctx) {
       return;
@@ -238,7 +257,7 @@
 
     const { leftBorder } = detail;
 
-    widthColumn = 1000 / $ratioMap;
+    widthColumn = 1000 / detail.ratioMap;
     currentPositionX = -leftBorder * $ratio;
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
@@ -261,15 +280,22 @@
     width: 1000px;
     overflow: hidden;
   }
-  .chart:hover {
-  }
   .tooltip {
     position: absolute;
     padding: 8px 12px;
-    background: #fff;
     box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0);
-    border: 1px solid rgb(238, 227, 227);
     border-radius: 10px;
+  }
+
+  .tooltip--light {
+    background: #fff;
+    border: 1px solid rgb(238, 227, 227);
+    color: #000;
+  }
+  .tooltip--dark {
+    background: #1c2533;
+    border: 1px solid #1c2533;
+    color: #fff;
   }
   .date {
     line-height: 1.5em;
@@ -311,7 +337,7 @@
       style="transform: translateX({currentPositionX}px);" />
 
     {#if tooltip}
-      <div class="tooltip" style="top: 10px; left: {tooltip.x - 65}px">
+      <div class="tooltip tooltip--{$theme}" style="top: 10px; left: {tooltip.x - 65}px">
         <p class="date">{tooltip.date}</p>
         <p>
           Views:
@@ -321,11 +347,12 @@
     {/if}
   </div>
 
-  <DiagramMap
+  <Map
     positionChart={positionXMap}
     on:move={moveSlider}
-    columnChart={widthColumn}
     on:changeScale={handleChangeScale}
+    columnChart={widthColumn}
+    draw={drawMap}
     {xData}
     {yData} />
 </div>

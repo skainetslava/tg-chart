@@ -1,9 +1,9 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
   import { data } from "../data.js";
-  import { ratio, ratioMap } from "../store/stats.js";
+  import { ratio, theme } from "../store/stats.js";
   import { formateDate } from "../utils/formateDate.js";
-  import Map from "./barMap.svelte";
+  import Map from "./map.svelte";
 
   let canvasRef;
   let chartRef;
@@ -72,7 +72,7 @@
       ctx.lineWidth = 0.3;
       ctx.beginPath();
       ctx.moveTo(widthColumn, 92 * i);
-      ctx.lineTo(widthCanvas * 3 , 92 * i);
+      ctx.lineTo(widthCanvas * 3, 92 * i);
       ctx.stroke();
     }
   };
@@ -94,6 +94,20 @@
       const date = formateDate(xData[i], "short");
       ctx.font = "14px Roboto";
       ctx.fillText(100 - i * 20, y, i * 92 - 5);
+    }
+  };
+
+  const drawMap = ctx => {
+    const widthColumn = 1000 / xData.length;
+    for (let i = 0; i < xData.length; i++) {
+      const heightColumn = yData[i] * 0.5;
+      ctx.fillStyle = "#64aded";
+      ctx.fillRect(
+        i * widthColumn,
+        50 - heightColumn,
+        widthColumn,
+        heightColumn
+      );
     }
   };
 
@@ -212,7 +226,7 @@
 
     const { leftBorder } = detail;
 
-    widthColumn = 1000 / $ratioMap;
+    widthColumn = 1000 / detail.ratioMap;
     currentPositionX = -leftBorder * $ratio;
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
@@ -247,6 +261,12 @@
     background: white;
     transition: opacity 0.3s;
   }
+  .wrapper--light {
+    background: white;
+  }
+  .wrapper--dark {
+    background: rgb(36, 47, 62);
+  }
 
   .left {
     left: 0;
@@ -254,10 +274,18 @@
   .tooltip {
     position: absolute;
     padding: 8px 12px;
-    background: #fff;
     box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0);
-    border: 1px solid rgb(238, 227, 227);
     border-radius: 10px;
+  }
+  .tooltip--light {
+    background: #fff;
+    border: 1px solid rgb(238, 227, 227);
+    color: #000;
+  }
+  .tooltip--dark {
+    background: #1c2533;
+    border: 1px solid #1c2533;
+    color: #fff;
   }
   .date {
     line-height: 1.5em;
@@ -298,13 +326,17 @@
       height="504px"
       style="transform: translateX({currentPositionX}px);" />
 
-    <div class="wrapper left" style="transform: translateX({limit}px);" />
     <div
-      class="wrapper right"
+      class="wrapper wrapper--{$theme} left"
+      style="transform: translateX({limit}px);" />
+    <div
+      class="wrapper wrapper--{$theme} right"
       style="transform: translateX({limit - widthColumn - 1000}px);" />
 
     {#if tooltip}
-      <div class="tooltip" style="top: 50px; left: {tooltip.x - 65}px">
+      <div
+        class="tooltip tooltip--{$theme}"
+        style="top: 50px; left: {tooltip.x - 65}px">
         <p class="date">{tooltip.date}</p>
         <p>
           Views:
@@ -317,6 +349,7 @@
   <Map
     positionChart={positionXMap}
     on:move={moveSlider}
+    draw={drawMap}
     columnChart={widthColumn}
     on:changeScale={handleChangeScale}
     {xData}

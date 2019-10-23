@@ -1,7 +1,9 @@
 <script>
   import { onMount, afterUpdate, createEventDispatcher } from "svelte";
   import { data } from "../data.js";
-  import { ratio, ratioMap } from "../store/stats.js";
+  import { ratio } from "../store/stats.js";
+  import { setContext, getContext } from "svelte";
+  import { theme } from "../store/stats";
 
   const dispatch = createEventDispatcher();
 
@@ -9,6 +11,7 @@
   export let columnChart;
   export let xData;
   export let yData;
+  export let draw;
 
   let canvasRef;
   let mapRef;
@@ -27,7 +30,8 @@
   let rightBorder = leftBorder + scale + 15;
   let distance;
 
-  $: scale = $ratioMap * widthColumn;
+  let ratioMap = 32;
+  $: scale = ratioMap * widthColumn;
   $: leftBorder = -positionChart || 0;
 
   onMount(() => {
@@ -35,7 +39,7 @@
       return;
     }
     const ctx = canvasRef.getContext("2d");
-    drawRectangle(ctx);
+    draw(ctx);
 
     ratio.update(() => columnChart / widthColumn);
   });
@@ -43,19 +47,6 @@
   afterUpdate(() => {
     offset = mapRef.offsetLeft;
   });
-
-  const drawRectangle = ctx => {
-    for (let i = 0; i < xData.length; i++) {
-      const heightColumn = yData[i] * 0.5;
-      ctx.fillStyle = "#64aded";
-      ctx.fillRect(
-        i * widthColumn,
-        50 - heightColumn,
-        widthColumn,
-        heightColumn
-      );
-    }
-  };
 
   const checkChartBorders = x => {
     if (x < 0) {
@@ -122,13 +113,12 @@
       leftBorder = checkLeftSlider(e.clientX - offset - 15);
     }
 
-    const widthSlider = (rightBorder - widthBorder - leftBorder) / widthColumn;
-    const newRatio = columnChart / widthColumn;
+    ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn;
 
-    ratioMap.update(() => widthSlider);
+    const newRatio = columnChart / widthColumn;
     ratio.update(() => newRatio);
 
-    dispatch("changeScale", { leftBorder, newRatio });
+    dispatch("changeScale", { leftBorder, newRatio, ratioMap: ratioMap });
   };
 
   const resetMouseActions = () => {
@@ -154,8 +144,15 @@
   .mask {
     position: absolute;
     height: 100%;
-    background: rgba(226, 238, 249, 1);
     width: 1000px;
+  }
+
+  .mask--light {
+    background: rgba(226, 238, 249, 1);
+  }
+
+  .mask--dark {
+    background:#2b3645;
   }
 
   .left {
@@ -164,21 +161,32 @@
 
   .handle {
     position: absolute;
-    border: 3px solid #c0d1e1;
     border-radius: 5px;
     height: calc(100% - 6px);
     z-index: 2;
     cursor: grab;
   }
 
+  .handle--light {
+    border: 3px solid #c0d1e1;
+  }
+  .handle--dark {
+    border: 3px solid #56626d;
+  }
+
   .border {
     position: absolute;
     width: 12px;
-    background: #c0d1e1;
     height: 100%;
     cursor: w-resize;
-
     z-index: 2;
+  }
+
+  .border--light {
+    background: #c0d1e1;
+  }
+  .border--dark {
+    background: #56626d;
   }
 
   .border_left {
@@ -203,6 +211,7 @@
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
+
   .border_right {
     border-bottom-right-radius: 6px;
     border-top-right-radius: 6px;
@@ -216,23 +225,23 @@
 
 <div class="map-wrapper" bind:this={mapRef}>
   <div
-    class="mask right"
+    class="mask mask--{$theme} right"
     style="transform: translateX({leftBorder + scale + widthBorder}px); width: {1000 - scale - leftBorder}px" />
   <div
-    class="mask left"
+    class="mask mask--{$theme} left"
     style="transform: translateX({leftBorder - 1000}px);" />
 
   <div
     on:mousedown={() => (isMouseDown = true)}
-    class="handle"
+    class="handle handle--{$theme}"
     style="transform: translateX({leftBorder + widthBorder}px); width: {scale}px" />
 
   <div
-    class="border border_left"
+    class="border border--{$theme} border_left"
     style="transform: translateX({leftBorder}px);"
     on:mousedown={handleDownLeftBorder} />
   <div
-    class="border border_right"
+    class="border border--{$theme} border_right"
     style="transform: translateX({leftBorder + scale + widthBorder}px);"
     on:mousedown={handleDownRightBorder} />
 
