@@ -11,7 +11,10 @@
   let ctx;
 
   const xData = data.columns[0].slice(1);
-  const yData = data.columns[1].slice(1);
+  const yData = {
+    banans: data.columns[1].slice(1),
+    oranges: data.columns[2].slice(1)
+  }
 
   let widthColumn = 30;
   let tooltip;
@@ -59,9 +62,9 @@
       ctx.fillStyle = "#64aded";
       ctx.fillRect(
         i * widthColumn,
-        500 - yData[i] * 5 - 40,
+        500 - yData.banans[i] * 5 - 40,
         widthColumn,
-        yData[i] * 5
+        yData.banans[i] * 5
       );
     }
   };
@@ -100,7 +103,7 @@
   const drawMap = ctx => {
     const widthColumn = 1000 / xData.length;
     for (let i = 0; i < xData.length; i++) {
-      const heightColumn = yData[i] * 0.5;
+      const heightColumn = yData.banans[i] * 0.5;
       ctx.fillStyle = "#64aded";
       ctx.fillRect(
         i * widthColumn,
@@ -141,7 +144,7 @@
   const updateDataTooltip = e => {
     const index = findColumnIndex(e.clientX);
     const dateColumn = formateDate(xData[index], "long");
-    const viewsColumn = yData[index];
+    const viewsColumn = yData.banans[index];
 
     tooltip = {
       ...tooltip,
@@ -353,5 +356,5 @@
     columnChart={widthColumn}
     on:changeScale={handleChangeScale}
     {xData}
-    {yData} />
+    yData={yData.banans} />
 </div>
