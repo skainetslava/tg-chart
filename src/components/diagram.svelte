@@ -3,7 +3,7 @@
   import { data } from "../data.js";
   import { ratio, theme } from "../store/stats.js";
   import { formateDate } from "../utils/formateDate.js";
-  import Map from "./Map.svelte";
+  import Map from "./map.svelte";
 
   let canvasRef;
   let chartRef;
