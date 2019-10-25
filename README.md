@@ -1,2 +1,3 @@
-#tg chart contest
-wip
+# Charts with canvas and JavaScript
+
+https://tg-chart.herokuapp.com/
