@@ -186,10 +186,11 @@
 
   const checkChartBorders = (x, translate, widthChart) => {
     let position = translate;
-
-    if (translate >= widthChart) {
-      position = -widthChart;
-      return position;
+    
+    const currentWidth = xData.length * widthColumn - 1000;
+    
+    if (translate >= currentWidth) {
+      return -currentWidth + 10;
     }
     if (translate <= 0) {
       position = 0;

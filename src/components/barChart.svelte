@@ -14,7 +14,7 @@
   const yData = {
     banans: data.columns[1].slice(1),
     oranges: data.columns[2].slice(1)
-  }
+  };
 
   let widthColumn = 30;
   let tooltip;
@@ -172,10 +172,10 @@
 
   const checkChartBorders = (x, translate, widthChart) => {
     let position = translate;
-
-    if (translate >= widthChart) {
-      position = -widthChart;
-      return position;
+    const currentWidth = xData.length * widthColumn - 1000;
+    
+    if (translate >= currentWidth) {
+      return -currentWidth + 10;
     }
     if (translate <= 0) {
       position = 0;

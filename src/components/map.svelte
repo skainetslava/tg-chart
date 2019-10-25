@@ -60,14 +60,14 @@
   };
 
   const checkRightSlider = x => {
-    if (rightBorder - leftBorder < 150 && x < rightBorder) {
+    if (x - leftBorder < 150 && x < rightBorder ) {
       x = rightBorder;
     }
     return x;
   };
 
   const checkLeftSlider = x => {
-    if (rightBorder - leftBorder < 150 && x > leftBorder) {
+    if (rightBorder - x < 150 && x > leftBorder ) {
       x = leftBorder;
     }
     return x;
@@ -108,6 +108,7 @@
     }
 
     if (isMovingRightBorder) {
+      console.log(e.clientX - offset);
       rightBorder = checkRightSlider(e.clientX - offset);
     } else {
       leftBorder = checkLeftSlider(e.clientX - offset - 15);
