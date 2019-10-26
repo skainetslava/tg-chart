@@ -39,7 +39,7 @@
       return;
     }
     const ctx = canvasRef.getContext("2d");
-    draw(ctx);
+    draw(ctx, 0.5);
 
     ratio.update(() => columnChart / widthColumn);
   });

@@ -2,7 +2,8 @@
   import { onMount, afterUpdate } from "svelte";
   import { data } from "../data.js";
   import { ratio, theme } from "../store/stats.js";
-  import { formateDate } from "../utils/formateDate.js";
+  import formateDate from "../utils/formateDate.js";
+  import findMaxValue from "../utils/findMaxValue.js"
   import Map from "./map.svelte";
 
   let canvasRef;
@@ -10,11 +11,10 @@
 
   let ctx;
 
-  const xData = data.columns[0].slice(1);
-  const yData = {
-    banans: data.columns[1].slice(1),
-    oranges: data.columns[2].slice(1)
-  };
+  export let xData;
+  export let yData;
+  export let colors;
+  export let title;
 
   let widthColumn = 30;
   let tooltip;
@@ -51,21 +51,31 @@
   });
 
   const draw = () => {
-    drawRectangle(ctx);
+    drawRectangle(ctx, 5);
     drawAxis(ctx);
     drawTextX(ctx);
     drawTextY(ctx);
   };
 
-  const drawRectangle = ctx => {
+  const drawRectangle = (ctx, h) => {
+    const dataKeys = Object.keys(yData);
+    const max = findMaxValue(yData);
+    const scale = 100 / (max * dataKeys.length);
+    const width = h === 5 ? widthColumn : 1000 / xData.length;
+
     for (let i = 0; i < xData.length; i++) {
-      ctx.fillStyle = "#64aded";
-      ctx.fillRect(
-        i * widthColumn,
-        500 - yData.banans[i] * 5 - 40,
-        widthColumn,
-        yData.banans[i] * 5
-      );
+      let point = h === 5 ? 40 : 0;
+      dataKeys.map((key, index) => {
+        const computedHeight = yData[key][i] * h * scale;
+        ctx.fillStyle = colors[index];
+        ctx.fillRect(
+          i * width,
+          h * 100 - computedHeight - point,
+          width,
+          computedHeight
+        );
+        point = point + computedHeight;
+      });
     }
   };
 
@@ -100,20 +110,6 @@
     }
   };
 
-  const drawMap = ctx => {
-    const widthColumn = 1000 / xData.length;
-    for (let i = 0; i < xData.length; i++) {
-      const heightColumn = yData.banans[i] * 0.5;
-      ctx.fillStyle = "#64aded";
-      ctx.fillRect(
-        i * widthColumn,
-        50 - heightColumn,
-        widthColumn,
-        heightColumn
-      );
-    }
-  };
-
   const getLimitBorder = x => {
     if (!currentColumn || !isMouseDown) {
       currentColumn = findColumnIndex(x);
@@ -144,12 +140,12 @@
   const updateDataTooltip = e => {
     const index = findColumnIndex(e.clientX);
     const dateColumn = formateDate(xData[index], "long");
-    const viewsColumn = yData.banans[index];
+    const views = Object.keys(yData).map(key => yData[key][index]);
 
     tooltip = {
       ...tooltip,
       date: dateColumn,
-      views: viewsColumn
+      views
     };
   };
 
@@ -173,7 +169,7 @@
   const checkChartBorders = (x, translate, widthChart) => {
     let position = translate;
     const currentWidth = xData.length * widthColumn - 1000;
-    
+
     if (translate >= currentWidth) {
       return -currentWidth + 10;
     }
@@ -244,7 +240,7 @@
     font-size: 18px;
   }
   .chart-one {
-    margin: 0 auto;
+    margin: 16px auto;
   }
   .chart {
     position: relative;
@@ -276,10 +272,17 @@
   }
   .tooltip {
     position: absolute;
+    width: 140px;
     padding: 8px 12px;
     box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0);
     border-radius: 10px;
   }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+
   .tooltip--light {
     background: #fff;
     border: 1px solid rgb(238, 227, 227);
@@ -295,6 +298,9 @@
     font-weight: 600;
   }
   .views {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     font-weight: 600;
     color: #64aded;
   }
@@ -307,7 +313,7 @@
 
 <div class="chart-one">
   <div class="header">
-    <p class="title">Bar Chart</p>
+    <p class="title">{title}</p>
     <p>
       {formateDate(xData[startDay], 'short')} - {formateDate(xData[endDay], 'short')}
     </p>
@@ -341,10 +347,15 @@
         class="tooltip tooltip--{$theme}"
         style="top: 50px; left: {tooltip.x - 65}px">
         <p class="date">{tooltip.date}</p>
-        <p>
-          Views:
-          <span class="views">{tooltip.views}</span>
-        </p>
+        <section class="info">
+          {#each tooltip.views as views, i}
+            <div class="views" style="color: {colors[i]}">
+              {Object.keys(yData)[i]}:
+              <span>{views}</span>
+            </div>
+          {/each}
+
+        </section>
       </div>
     {/if}
   </div>
@@ -352,7 +363,7 @@
   <Map
     positionChart={positionXMap}
     on:move={moveSlider}
-    draw={drawMap}
+    draw={drawRectangle}
     columnChart={widthColumn}
     on:changeScale={handleChangeScale}
     {xData}

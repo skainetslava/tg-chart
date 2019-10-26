@@ -1,10 +1,23 @@
 <script>
   import BarChart from "./components/barChart.svelte";
   import Diagram from "./components/diagram.svelte";
+  import { data } from "./data.js";
+
   import Lamp from "./components/lamp.svelte";
   import { theme } from "./store/stats";
 
   let color = "#fff";
+
+  const xData = data.columns[0].slice(1);
+  const products = {
+    banans: data.columns[1].slice(1),
+    oranges: data.columns[2].slice(1),
+    apples: data.columns[2].slice(1)
+  };
+  const product = {
+    banans: data.columns[1].slice(1)
+  };
+  const colors = Object.values(data.colors);
 
   const changeTheme = () => {
     let currentTheme = $theme === "light" ? "dark" : "light";
@@ -82,7 +95,8 @@
     <button class="button button--{$theme}" on:click={changeTheme}>
       <Lamp {color} />
     </button>
-  </header>
-  <BarChart />
-  <Diagram />
+  </header> 
+  <BarChart {xData} yData={product} {colors} title="Chart 1"/>
+  <BarChart {xData} yData={products} {colors} title="Chart 2"/>
+  <Diagram {xData} yData={product} {colors} title="Chart 3"/>
 </div>
