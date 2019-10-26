@@ -90,7 +90,7 @@
   <header>
     <div class="describe">
       <h3>Chart Contest</h3>
-      <p>These charts are made with canvas.</p>
+      <p>These charts are made with canvas and vanila javascript.</p>
     </div>
     <button class="button button--{$theme}" on:click={changeTheme}>
       <Lamp {color} />

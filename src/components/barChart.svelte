@@ -235,12 +235,12 @@
 
 <style>
   .title {
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     font-weight: bold;
     font-size: 18px;
   }
   .chart-one {
-    margin: 16px auto;
+    margin: 48px auto;
   }
   .chart {
     position: relative;

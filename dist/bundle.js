@@ -1237,11 +1237,11 @@ var app = (function () {
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
-    			attr_dev(p, "class", "date svelte-m5mj12");
+    			attr_dev(p, "class", "date svelte-12bhjpd");
     			add_location(p, file$1, 348, 8, 8015);
-    			attr_dev(section, "class", "info svelte-m5mj12");
+    			attr_dev(section, "class", "info svelte-12bhjpd");
     			add_location(section, file$1, 349, 8, 8059);
-    			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-m5mj12");
+    			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-12bhjpd");
     			set_style(div, "top", "50px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
     			add_location(div, file$1, 345, 6, 7904);
@@ -1286,7 +1286,7 @@ var app = (function () {
     				each_blocks.length = each_value.length;
     			}
 
-    			if ((changed.$theme) && div_class_value !== (div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-m5mj12")) {
+    			if ((changed.$theme) && div_class_value !== (div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-12bhjpd")) {
     				attr_dev(div, "class", div_class_value);
     			}
 
@@ -1320,7 +1320,7 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			add_location(span, file$1, 353, 14, 8242);
-    			attr_dev(div, "class", "views svelte-m5mj12");
+    			attr_dev(div, "class", "views svelte-12bhjpd");
     			set_style(div, "color", ctx.colors[ctx.i]);
     			add_location(div, file$1, 351, 12, 8140);
     		},
@@ -1398,26 +1398,26 @@ var app = (function () {
     			if (if_block) if_block.c();
     			t9 = space();
     			map.$$.fragment.c();
-    			attr_dev(p0, "class", "title svelte-m5mj12");
+    			attr_dev(p0, "class", "title svelte-12bhjpd");
     			add_location(p0, file$1, 315, 4, 6999);
     			add_location(p1, file$1, 316, 4, 7033);
-    			attr_dev(div0, "class", "header svelte-m5mj12");
+    			attr_dev(div0, "class", "header svelte-12bhjpd");
     			add_location(div0, file$1, 314, 2, 6973);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
     			add_location(canvas, file$1, 329, 4, 7424);
-    			attr_dev(div1, "class", div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-m5mj12");
+    			attr_dev(div1, "class", div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-12bhjpd");
     			set_style(div1, "transform", "translateX(" + ctx.limit + "px)");
     			add_location(div1, file$1, 337, 4, 7643);
-    			attr_dev(div2, "class", div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-m5mj12");
+    			attr_dev(div2, "class", div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-12bhjpd");
     			set_style(div2, "transform", "translateX(" + (ctx.limit - ctx.widthColumn - 1000) + "px)");
     			add_location(div2, file$1, 340, 4, 7751);
-    			attr_dev(div3, "class", "chart svelte-m5mj12");
+    			attr_dev(div3, "class", "chart svelte-12bhjpd");
     			attr_dev(div3, "style", div3_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
     			add_location(div3, file$1, 320, 2, 7147);
-    			attr_dev(div4, "class", "chart-one svelte-m5mj12");
+    			attr_dev(div4, "class", "chart-one svelte-12bhjpd");
     			add_location(div4, file$1, 313, 0, 6946);
 
     			dispose = [
@@ -1476,7 +1476,7 @@ var app = (function () {
     				set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
     			}
 
-    			if ((!current || changed.$theme) && div1_class_value !== (div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-m5mj12")) {
+    			if ((!current || changed.$theme) && div1_class_value !== (div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-12bhjpd")) {
     				attr_dev(div1, "class", div1_class_value);
     			}
 
@@ -1484,7 +1484,7 @@ var app = (function () {
     				set_style(div1, "transform", "translateX(" + ctx.limit + "px)");
     			}
 
-    			if ((!current || changed.$theme) && div2_class_value !== (div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-m5mj12")) {
+    			if ((!current || changed.$theme) && div2_class_value !== (div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-12bhjpd")) {
     				attr_dev(div2, "class", div2_class_value);
     			}
 
@@ -2858,7 +2858,7 @@ var app = (function () {
     			h3.textContent = "Chart Contest";
     			t1 = space();
     			p = element("p");
-    			p.textContent = "These charts are made with canvas.";
+    			p.textContent = "These charts are made with canvas and vanila javascript.";
     			t3 = space();
     			button = element("button");
     			lamp.$$.fragment.c();
@@ -2875,7 +2875,7 @@ var app = (function () {
     			attr_dev(div0, "class", "describe svelte-oxahje");
     			add_location(div0, file$4, 90, 4, 1743);
     			attr_dev(button, "class", button_class_value = "button button--" + ctx.$theme + " svelte-oxahje");
-    			add_location(button, file$4, 94, 4, 1858);
+    			add_location(button, file$4, 94, 4, 1880);
     			attr_dev(header, "class", "svelte-oxahje");
     			add_location(header, file$4, 89, 2, 1730);
     			attr_dev(div1, "class", div1_class_value = "app " + ctx.$theme + " svelte-oxahje");
