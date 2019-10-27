@@ -99,4 +99,5 @@
   <BarChart {xData} yData={product} {colors} title="Chart 1"/>
   <BarChart {xData} yData={products} {colors} title="Chart 2"/>
   <Diagram {xData} yData={product} {colors} title="Chart 3"/>
+  <Diagram {xData} yData={products} {colors} title="Chart 4"/>
 </div>
