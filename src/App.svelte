@@ -12,7 +12,7 @@
   const products = {
     banans: data.columns[1].slice(1),
     oranges: data.columns[2].slice(1),
-    apples: data.columns[2].slice(1)
+    apples: data.columns[3].slice(1)
   };
   const product = {
     banans: data.columns[1].slice(1)
