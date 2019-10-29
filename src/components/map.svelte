@@ -60,14 +60,14 @@
   };
 
   const checkRightSlider = x => {
-    if (x - leftBorder < 150 && x < rightBorder ) {
+    if (x - leftBorder < 150 && x < rightBorder) {
       x = rightBorder;
     }
     return x;
   };
 
   const checkLeftSlider = x => {
-    if (rightBorder - x < 150 && x > leftBorder ) {
+    if (rightBorder - x < 150 && x > leftBorder) {
       x = leftBorder;
     }
     return x;
@@ -113,8 +113,12 @@
       leftBorder = checkLeftSlider(e.clientX - offset);
     }
 
-    ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn;
-    dispatch("changeScale", { leftBorder, ratioMap, widthColumnMap: widthColumn });
+    ratioMap = (rightBorder - widthBorder - leftBorder + 12) / widthColumn;
+    dispatch("changeScale", {
+      leftBorder,
+      ratioMap,
+      widthColumnMap: widthColumn
+    });
   };
 
   const resetMouseActions = () => {
@@ -148,7 +152,7 @@
   }
 
   .mask--dark {
-    background:#2b3645;
+    background: #2b3645;
   }
 
   .left {

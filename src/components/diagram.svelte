@@ -257,15 +257,19 @@
     const { positionXMap } = detail;
     currentPositionX = -positionXMap * $ratio;
   };
+ 
   const handleChangeScale = ({ detail }) => {
     if (!ctx) {
       return;
     }
 
-    const { leftBorder } = detail;
+    const { leftBorder, widthColumnMap, ratioMap } = detail;
 
-    widthColumn = 1000 / detail.ratioMap;
-    currentPositionX = -leftBorder * $ratio;
+    widthColumn = 1000 / ratioMap;
+    currentPositionX = (-leftBorder * widthColumn) / widthColumnMap;
+
+    const newRatio = widthColumn / widthColumnMap;
+    ratio.update(() => newRatio);
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
     draw(ctx);

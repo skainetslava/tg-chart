@@ -923,30 +923,30 @@ var app = (function () {
     			div4 = element("div");
     			t4 = space();
     			canvas = element("canvas");
-    			attr_dev(div0, "class", div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-i12c8f");
+    			attr_dev(div0, "class", div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-1f02xqb");
     			set_style(div0, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
     			set_style(div0, "width", "" + (1000 - ctx.scale - ctx.leftBorder) + "px");
-    			add_location(div0, file, 222, 2, 4430);
-    			attr_dev(div1, "class", div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-i12c8f");
+    			add_location(div0, file, 226, 2, 4460);
+    			attr_dev(div1, "class", div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-1f02xqb");
     			set_style(div1, "transform", "translateX(" + (ctx.leftBorder - 1000) + "px)");
-    			add_location(div1, file, 225, 2, 4591);
-    			attr_dev(div2, "class", div2_class_value = "handle handle--" + ctx.$theme + " svelte-i12c8f");
+    			add_location(div1, file, 229, 2, 4621);
+    			attr_dev(div2, "class", div2_class_value = "handle handle--" + ctx.$theme + " svelte-1f02xqb");
     			set_style(div2, "transform", "translateX(" + (ctx.leftBorder + widthBorder) + "px)");
     			set_style(div2, "width", "" + ctx.scale + "px");
-    			add_location(div2, file, 229, 2, 4701);
-    			attr_dev(div3, "class", div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-i12c8f");
+    			add_location(div2, file, 233, 2, 4731);
+    			attr_dev(div3, "class", div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-1f02xqb");
     			set_style(div3, "transform", "translateX(" + ctx.leftBorder + "px)");
-    			add_location(div3, file, 234, 2, 4881);
-    			attr_dev(div4, "class", div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-i12c8f");
+    			add_location(div3, file, 238, 2, 4911);
+    			attr_dev(div4, "class", div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-1f02xqb");
     			set_style(div4, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
-    			add_location(div4, file, 238, 2, 5034);
-    			attr_dev(canvas, "class", "map svelte-i12c8f");
+    			add_location(div4, file, 242, 2, 5064);
+    			attr_dev(canvas, "class", "map svelte-1f02xqb");
     			attr_dev(canvas, "width", "1000px");
     			attr_dev(canvas, "height", "50px");
     			set_style(canvas, "transform", "translateX(0px)");
-    			add_location(canvas, file, 243, 2, 5213);
-    			attr_dev(div5, "class", "map-wrapper svelte-i12c8f");
-    			add_location(div5, file, 221, 0, 4382);
+    			add_location(canvas, file, 247, 2, 5243);
+    			attr_dev(div5, "class", "map-wrapper svelte-1f02xqb");
+    			add_location(div5, file, 225, 0, 4412);
 
     			dispose = [
     				listen_dev(window, "mousemove", ctx.handleMoveBorder),
@@ -980,7 +980,7 @@ var app = (function () {
     		},
 
     		p: function update(changed, ctx) {
-    			if ((changed.$theme) && div0_class_value !== (div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-i12c8f")) {
+    			if ((changed.$theme) && div0_class_value !== (div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-1f02xqb")) {
     				attr_dev(div0, "class", div0_class_value);
     			}
 
@@ -992,7 +992,7 @@ var app = (function () {
     				set_style(div0, "width", "" + (1000 - ctx.scale - ctx.leftBorder) + "px");
     			}
 
-    			if ((changed.$theme) && div1_class_value !== (div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-i12c8f")) {
+    			if ((changed.$theme) && div1_class_value !== (div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-1f02xqb")) {
     				attr_dev(div1, "class", div1_class_value);
     			}
 
@@ -1000,7 +1000,7 @@ var app = (function () {
     				set_style(div1, "transform", "translateX(" + (ctx.leftBorder - 1000) + "px)");
     			}
 
-    			if ((changed.$theme) && div2_class_value !== (div2_class_value = "handle handle--" + ctx.$theme + " svelte-i12c8f")) {
+    			if ((changed.$theme) && div2_class_value !== (div2_class_value = "handle handle--" + ctx.$theme + " svelte-1f02xqb")) {
     				attr_dev(div2, "class", div2_class_value);
     			}
 
@@ -1012,7 +1012,7 @@ var app = (function () {
     				set_style(div2, "width", "" + ctx.scale + "px");
     			}
 
-    			if ((changed.$theme) && div3_class_value !== (div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-i12c8f")) {
+    			if ((changed.$theme) && div3_class_value !== (div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-1f02xqb")) {
     				attr_dev(div3, "class", div3_class_value);
     			}
 
@@ -1020,7 +1020,7 @@ var app = (function () {
     				set_style(div3, "transform", "translateX(" + ctx.leftBorder + "px)");
     			}
 
-    			if ((changed.$theme) && div4_class_value !== (div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-i12c8f")) {
+    			if ((changed.$theme) && div4_class_value !== (div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-1f02xqb")) {
     				attr_dev(div4, "class", div4_class_value);
     			}
 
@@ -1103,14 +1103,14 @@ var app = (function () {
       };
 
       const checkRightSlider = x => {
-        if (x - leftBorder < 150 && x < rightBorder ) {
+        if (x - leftBorder < 150 && x < rightBorder) {
           x = rightBorder;
         }
         return x;
       };
 
       const checkLeftSlider = x => {
-        if (rightBorder - x < 150 && x > leftBorder ) {
+        if (rightBorder - x < 150 && x > leftBorder) {
           x = leftBorder;
         }
         return x;
@@ -1156,8 +1156,12 @@ var app = (function () {
           $$invalidate('leftBorder', leftBorder = checkLeftSlider(e.clientX - offset));
         }
 
-        $$invalidate('ratioMap', ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn);
-        dispatch("changeScale", { leftBorder, ratioMap, widthColumnMap: widthColumn });
+        $$invalidate('ratioMap', ratioMap = (rightBorder - widthBorder - leftBorder + 12) / widthColumn);
+        dispatch("changeScale", {
+          leftBorder,
+          ratioMap,
+          widthColumnMap: widthColumn
+        });
       };
 
       const resetMouseActions = () => {
@@ -2045,7 +2049,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (346:4) {#if tooltip}
+    // (350:4) {#if tooltip}
     function create_if_block$1(ctx) {
     	var div, p, t0_value = ctx.tooltip.date + "", t0, t1, section, div_class_value;
 
@@ -2069,13 +2073,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-1hxp540");
-    			add_location(p, file$2, 349, 8, 8156);
+    			add_location(p, file$2, 353, 8, 8291);
     			attr_dev(section, "class", "info");
-    			add_location(section, file$2, 350, 8, 8200);
+    			add_location(section, file$2, 354, 8, 8335);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-1hxp540");
     			set_style(div, "top", "10px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$2, 346, 6, 8045);
+    			add_location(div, file$2, 350, 6, 8180);
     		},
 
     		m: function mount(target, anchor) {
@@ -2134,11 +2138,11 @@ var app = (function () {
     			destroy_each(each_blocks, detaching);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(346:4) {#if tooltip}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(350:4) {#if tooltip}", ctx });
     	return block;
     }
 
-    // (352:10) {#each tooltip.views as views, i}
+    // (356:10) {#each tooltip.views as views, i}
     function create_each_block$1(ctx) {
     	var div, t0_value = ctx.Object.keys(ctx.yData)[ctx.i] + "", t0, t1, span, t2_value = ctx.views + "", t2, t3;
 
@@ -2150,10 +2154,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$2, 354, 14, 8383);
+    			add_location(span, file$2, 358, 14, 8518);
     			attr_dev(div, "class", "views svelte-1hxp540");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$2, 352, 12, 8281);
+    			add_location(div, file$2, 356, 12, 8416);
     		},
 
     		m: function mount(target, anchor) {
@@ -2185,7 +2189,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(352:10) {#each tooltip.views as views, i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(356:10) {#each tooltip.views as views, i}", ctx });
     	return block;
     }
 
@@ -2226,20 +2230,20 @@ var app = (function () {
     			t7 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-1hxp540");
-    			add_location(p0, file$2, 323, 4, 7380);
-    			add_location(p1, file$2, 324, 4, 7414);
+    			add_location(p0, file$2, 327, 4, 7515);
+    			add_location(p1, file$2, 328, 4, 7549);
     			attr_dev(div0, "class", "header svelte-1hxp540");
-    			add_location(div0, file$2, 322, 2, 7354);
+    			add_location(div0, file$2, 326, 2, 7489);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$2, 337, 4, 7805);
+    			add_location(canvas, file$2, 341, 4, 7940);
     			attr_dev(div1, "class", "chart svelte-1hxp540");
     			attr_dev(div1, "style", div1_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div1, file$2, 328, 2, 7528);
+    			add_location(div1, file$2, 332, 2, 7663);
     			attr_dev(div2, "class", "chart-two svelte-1hxp540");
-    			add_location(div2, file$2, 321, 0, 7327);
+    			add_location(div2, file$2, 325, 0, 7462);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -2596,15 +2600,19 @@ var app = (function () {
         const { positionXMap } = detail;
         $$invalidate('currentPositionX', currentPositionX = -positionXMap * $ratio);
       };
+     
       const handleChangeScale = ({ detail }) => {
         if (!ctx) {
           return;
         }
 
-        const { leftBorder } = detail;
+        const { leftBorder, widthColumnMap, ratioMap } = detail;
 
-        $$invalidate('widthColumn', widthColumn = 1000 / detail.ratioMap);
-        $$invalidate('currentPositionX', currentPositionX = -leftBorder * $ratio);
+        $$invalidate('widthColumn', widthColumn = 1000 / ratioMap);
+        $$invalidate('currentPositionX', currentPositionX = (-leftBorder * widthColumn) / widthColumnMap);
+
+        const newRatio = widthColumn / widthColumnMap;
+        ratio.update(() => newRatio);
 
         ctx.clearRect(0, 0, widthCanvas * 3, 504);
         draw();
