@@ -3,7 +3,7 @@
   import { data } from "../data.js";
   import { ratio, theme } from "../store/stats.js";
   import formateDate from "../utils/formateDate.js";
-  import findMaxValue from "../utils/findMaxValue.js"
+  import findMaxValue from "../utils/findMaxValue.js";
   import Map from "./map.svelte";
 
   let canvasRef;
@@ -223,10 +223,13 @@
       return;
     }
 
-    const { leftBorder } = detail;
+    const { leftBorder, widthColumnMap, ratioMap } = detail;
 
-    widthColumn = 1000 / detail.ratioMap;
-    currentPositionX = -leftBorder * $ratio;
+    widthColumn = 1000 / ratioMap;
+    currentPositionX = (-leftBorder * widthColumn) / widthColumnMap;
+
+    const newRatio = widthColumn / widthColumnMap;
+    ratio.update(() => newRatio);
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
     draw(ctx);

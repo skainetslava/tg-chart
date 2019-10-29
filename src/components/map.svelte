@@ -85,7 +85,7 @@
     }
 
     leftBorder = checkChartBorders(x - distance);
-    rightBorder = checkChartBorders(leftBorder + scale + widthBorder);
+    rightBorder = leftBorder + scale + widthBorder;
 
     dispatch("move", { positionXMap: leftBorder });
   };
@@ -108,18 +108,13 @@
     }
 
     if (isMovingRightBorder) {
-      console.log(e.clientX - offset);
       rightBorder = checkRightSlider(e.clientX - offset);
     } else {
-      leftBorder = checkLeftSlider(e.clientX - offset - 15);
+      leftBorder = checkLeftSlider(e.clientX - offset);
     }
 
     ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn;
-
-    const newRatio = columnChart / widthColumn;
-    ratio.update(() => newRatio);
-
-    dispatch("changeScale", { leftBorder, newRatio, ratioMap: ratioMap });
+    dispatch("changeScale", { leftBorder, ratioMap, widthColumnMap: widthColumn });
   };
 
   const resetMouseActions = () => {
