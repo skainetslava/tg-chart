@@ -885,6 +885,16 @@ var app = (function () {
     const ratio = writable(0);
     const theme = writable("light");
 
+    const changeScale = ({ detail }) => {
+      const { leftBorder, widthColumnMap, ratioMap } = detail;
+
+      const widthColumn = 1000 / ratioMap;
+      const position = (-leftBorder * widthColumn) / widthColumnMap - 5 * widthColumnMap;
+      const newRatio = widthColumn / widthColumnMap;
+
+      return { newRatio, position, column: widthColumn };
+    };
+
     function formateDate(value, type) {
         const day = new Date(value).getDate();
         const month = new Date(value).toLocaleString("en", {
@@ -926,27 +936,27 @@ var app = (function () {
     			attr_dev(div0, "class", div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-1f02xqb");
     			set_style(div0, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
     			set_style(div0, "width", "" + (1000 - ctx.scale - ctx.leftBorder) + "px");
-    			add_location(div0, file, 226, 2, 4460);
+    			add_location(div0, file, 226, 2, 4455);
     			attr_dev(div1, "class", div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-1f02xqb");
     			set_style(div1, "transform", "translateX(" + (ctx.leftBorder - 1000) + "px)");
-    			add_location(div1, file, 229, 2, 4621);
+    			add_location(div1, file, 229, 2, 4616);
     			attr_dev(div2, "class", div2_class_value = "handle handle--" + ctx.$theme + " svelte-1f02xqb");
     			set_style(div2, "transform", "translateX(" + (ctx.leftBorder + widthBorder) + "px)");
     			set_style(div2, "width", "" + ctx.scale + "px");
-    			add_location(div2, file, 233, 2, 4731);
+    			add_location(div2, file, 233, 2, 4726);
     			attr_dev(div3, "class", div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-1f02xqb");
     			set_style(div3, "transform", "translateX(" + ctx.leftBorder + "px)");
-    			add_location(div3, file, 238, 2, 4911);
+    			add_location(div3, file, 238, 2, 4906);
     			attr_dev(div4, "class", div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-1f02xqb");
     			set_style(div4, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
-    			add_location(div4, file, 242, 2, 5064);
+    			add_location(div4, file, 242, 2, 5059);
     			attr_dev(canvas, "class", "map svelte-1f02xqb");
     			attr_dev(canvas, "width", "1000px");
     			attr_dev(canvas, "height", "50px");
     			set_style(canvas, "transform", "translateX(0px)");
-    			add_location(canvas, file, 247, 2, 5243);
+    			add_location(canvas, file, 247, 2, 5238);
     			attr_dev(div5, "class", "map-wrapper svelte-1f02xqb");
-    			add_location(div5, file, 225, 0, 4412);
+    			add_location(div5, file, 225, 0, 4407);
 
     			dispose = [
     				listen_dev(window, "mousemove", ctx.handleMoveBorder),
@@ -1156,7 +1166,7 @@ var app = (function () {
           $$invalidate('leftBorder', leftBorder = checkLeftSlider(e.clientX - offset));
         }
 
-        $$invalidate('ratioMap', ratioMap = (rightBorder - widthBorder - leftBorder + 12) / widthColumn);
+        $$invalidate('ratioMap', ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn);
         dispatch("changeScale", {
           leftBorder,
           ratioMap,
@@ -1351,13 +1361,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-12bhjpd");
-    			add_location(p, file$1, 351, 8, 8148);
+    			add_location(p, file$1, 351, 8, 8105);
     			attr_dev(section, "class", "info svelte-12bhjpd");
-    			add_location(section, file$1, 352, 8, 8192);
+    			add_location(section, file$1, 352, 8, 8149);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-12bhjpd");
     			set_style(div, "top", "50px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$1, 348, 6, 8037);
+    			add_location(div, file$1, 348, 6, 7994);
     		},
 
     		m: function mount(target, anchor) {
@@ -1432,10 +1442,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$1, 356, 14, 8375);
+    			add_location(span, file$1, 356, 14, 8332);
     			attr_dev(div, "class", "views svelte-12bhjpd");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$1, 354, 12, 8273);
+    			add_location(div, file$1, 354, 12, 8230);
     		},
 
     		m: function mount(target, anchor) {
@@ -1512,26 +1522,26 @@ var app = (function () {
     			t9 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-12bhjpd");
-    			add_location(p0, file$1, 318, 4, 7132);
-    			add_location(p1, file$1, 319, 4, 7166);
+    			add_location(p0, file$1, 318, 4, 7089);
+    			add_location(p1, file$1, 319, 4, 7123);
     			attr_dev(div0, "class", "header svelte-12bhjpd");
-    			add_location(div0, file$1, 317, 2, 7106);
+    			add_location(div0, file$1, 317, 2, 7063);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$1, 332, 4, 7557);
+    			add_location(canvas, file$1, 332, 4, 7514);
     			attr_dev(div1, "class", div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-12bhjpd");
     			set_style(div1, "transform", "translateX(" + ctx.limit + "px)");
-    			add_location(div1, file$1, 340, 4, 7776);
+    			add_location(div1, file$1, 340, 4, 7733);
     			attr_dev(div2, "class", div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-12bhjpd");
     			set_style(div2, "transform", "translateX(" + (ctx.limit - ctx.widthColumn - 1000) + "px)");
-    			add_location(div2, file$1, 343, 4, 7884);
+    			add_location(div2, file$1, 343, 4, 7841);
     			attr_dev(div3, "class", "chart svelte-12bhjpd");
     			attr_dev(div3, "style", div3_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div3, file$1, 323, 2, 7280);
+    			add_location(div3, file$1, 323, 2, 7237);
     			attr_dev(div4, "class", "chart-one svelte-12bhjpd");
-    			add_location(div4, file$1, 316, 0, 7079);
+    			add_location(div4, file$1, 316, 0, 7036);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -1875,12 +1885,10 @@ var app = (function () {
           return;
         }
 
-        const { leftBorder, widthColumnMap, ratioMap } = detail;
+        const { newRatio, position, column } = changeScale({ detail });
 
-        $$invalidate('widthColumn', widthColumn = 1000 / ratioMap);
-        $$invalidate('currentPositionX', currentPositionX = (-leftBorder * widthColumn) / widthColumnMap);
-
-        const newRatio = widthColumn / widthColumnMap;
+        $$invalidate('widthColumn', widthColumn = column);
+        $$invalidate('currentPositionX', currentPositionX = position);
         ratio.update(() => newRatio);
 
         ctx.clearRect(0, 0, widthCanvas * 3, 504);
@@ -2049,7 +2057,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (350:4) {#if tooltip}
+    // (349:4) {#if tooltip}
     function create_if_block$1(ctx) {
     	var div, p, t0_value = ctx.tooltip.date + "", t0, t1, section, div_class_value;
 
@@ -2073,13 +2081,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-1hxp540");
-    			add_location(p, file$2, 353, 8, 8291);
+    			add_location(p, file$2, 352, 8, 8245);
     			attr_dev(section, "class", "info");
-    			add_location(section, file$2, 354, 8, 8335);
+    			add_location(section, file$2, 353, 8, 8289);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-1hxp540");
     			set_style(div, "top", "10px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$2, 350, 6, 8180);
+    			add_location(div, file$2, 349, 6, 8134);
     		},
 
     		m: function mount(target, anchor) {
@@ -2138,11 +2146,11 @@ var app = (function () {
     			destroy_each(each_blocks, detaching);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(350:4) {#if tooltip}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(349:4) {#if tooltip}", ctx });
     	return block;
     }
 
-    // (356:10) {#each tooltip.views as views, i}
+    // (355:10) {#each tooltip.views as views, i}
     function create_each_block$1(ctx) {
     	var div, t0_value = ctx.Object.keys(ctx.yData)[ctx.i] + "", t0, t1, span, t2_value = ctx.views + "", t2, t3;
 
@@ -2154,10 +2162,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$2, 358, 14, 8518);
+    			add_location(span, file$2, 357, 14, 8472);
     			attr_dev(div, "class", "views svelte-1hxp540");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$2, 356, 12, 8416);
+    			add_location(div, file$2, 355, 12, 8370);
     		},
 
     		m: function mount(target, anchor) {
@@ -2189,7 +2197,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(356:10) {#each tooltip.views as views, i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(355:10) {#each tooltip.views as views, i}", ctx });
     	return block;
     }
 
@@ -2230,20 +2238,20 @@ var app = (function () {
     			t7 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-1hxp540");
-    			add_location(p0, file$2, 327, 4, 7515);
-    			add_location(p1, file$2, 328, 4, 7549);
+    			add_location(p0, file$2, 326, 4, 7469);
+    			add_location(p1, file$2, 327, 4, 7503);
     			attr_dev(div0, "class", "header svelte-1hxp540");
-    			add_location(div0, file$2, 326, 2, 7489);
+    			add_location(div0, file$2, 325, 2, 7443);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$2, 341, 4, 7940);
+    			add_location(canvas, file$2, 340, 4, 7894);
     			attr_dev(div1, "class", "chart svelte-1hxp540");
     			attr_dev(div1, "style", div1_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div1, file$2, 332, 2, 7663);
+    			add_location(div1, file$2, 331, 2, 7617);
     			attr_dev(div2, "class", "chart-two svelte-1hxp540");
-    			add_location(div2, file$2, 325, 0, 7462);
+    			add_location(div2, file$2, 324, 0, 7416);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -2600,18 +2608,16 @@ var app = (function () {
         const { positionXMap } = detail;
         $$invalidate('currentPositionX', currentPositionX = -positionXMap * $ratio);
       };
-     
+
       const handleChangeScale = ({ detail }) => {
         if (!ctx) {
           return;
         }
 
-        const { leftBorder, widthColumnMap, ratioMap } = detail;
+        const { newRatio, position, column } = changeScale({ detail });
 
-        $$invalidate('widthColumn', widthColumn = 1000 / ratioMap);
-        $$invalidate('currentPositionX', currentPositionX = (-leftBorder * widthColumn) / widthColumnMap);
-
-        const newRatio = widthColumn / widthColumnMap;
+        $$invalidate('widthColumn', widthColumn = column);
+        $$invalidate('currentPositionX', currentPositionX = position);
         ratio.update(() => newRatio);
 
         ctx.clearRect(0, 0, widthCanvas * 3, 504);

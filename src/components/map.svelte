@@ -113,7 +113,7 @@
       leftBorder = checkLeftSlider(e.clientX - offset);
     }
 
-    ratioMap = (rightBorder - widthBorder - leftBorder + 12) / widthColumn;
+    ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn;
     dispatch("changeScale", {
       leftBorder,
       ratioMap,

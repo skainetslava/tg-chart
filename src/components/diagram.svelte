@@ -4,6 +4,7 @@
   import { ratio, theme } from "../store/stats.js";
   import formateDate from "../utils/formateDate.js";
   import findMaxValue from "../utils/findMaxValue.js";
+  import { changeScale } from "./helpers.js";
 
   import Map from "./map.svelte";
 
@@ -257,18 +258,16 @@
     const { positionXMap } = detail;
     currentPositionX = -positionXMap * $ratio;
   };
- 
+
   const handleChangeScale = ({ detail }) => {
     if (!ctx) {
       return;
     }
 
-    const { leftBorder, widthColumnMap, ratioMap } = detail;
+    const { newRatio, position, column } = changeScale({ detail });
 
-    widthColumn = 1000 / ratioMap;
-    currentPositionX = (-leftBorder * widthColumn) / widthColumnMap;
-
-    const newRatio = widthColumn / widthColumnMap;
+    widthColumn = column;
+    currentPositionX = position;
     ratio.update(() => newRatio);
 
     ctx.clearRect(0, 0, widthCanvas * 3, 504);
