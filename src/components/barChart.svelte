@@ -27,6 +27,8 @@
   let positionXMap = 0;
   let offset = 0;
   let currentColumn;
+  let rightBorderMap;
+  let leftBorderMap;
 
   const widthCanvas = xData.length * widthColumn;
   const dataArray = xData.map((val, i) => i * widthColumn);
@@ -183,7 +185,7 @@
 
     return position;
   };
-
+  
   const handleMouseMove = e => {
     if (isMouseDown) {
       const translate = -1 * (e.clientX - initialPositionX);
@@ -192,8 +194,9 @@
         e.clientX,
         translate,
         widthCanvas - 1000
-      );
-      positionXMap = currentPositionX / $ratio;
+      ) - 60;
+      leftBorderMap = -currentPositionX / $ratio;
+      rightBorderMap = (-currentPositionX + 1000) / $ratio;
       updatePositionTooltip(e);
     } else {
       renderTooltip(e);
@@ -364,11 +367,12 @@
   </div>
 
   <Map
-    positionChart={positionXMap}
     on:move={moveSlider}
+    on:changeScale={handleChangeScale}
     draw={drawRectangle}
     columnChart={widthColumn}
-    on:changeScale={handleChangeScale}
     {xData}
+    {rightBorderMap}
+    {leftBorderMap}
     yData={yData.banans} />
 </div>

@@ -7,7 +7,8 @@
 
   const dispatch = createEventDispatcher();
 
-  export let positionChart;
+  export let rightBorderMap;
+  export let leftBorderMap;
   export let columnChart;
   export let xData;
   export let yData;
@@ -30,9 +31,12 @@
   let rightBorder = leftBorder + scale + 15;
   let distance;
 
-  let ratioMap = 32;
+  let ratioMap = 34;
+
   $: scale = ratioMap * widthColumn;
-  $: leftBorder = -positionChart || 0;
+  $: leftBorder = leftBorderMap + widthBorder || 0;
+  $: rightBorder = rightBorderMap + widthBorder;
+
 
   onMount(() => {
     if (!canvasRef.getContext) {
@@ -49,8 +53,8 @@
   });
 
   const checkChartBorders = x => {
-    if (x < 0) {
-      return 0;
+    if (x < -widthBorder) {
+      return -widthBorder;
     }
     if (x + scale > 1000) {
       return 990 - scale;

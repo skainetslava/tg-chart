@@ -889,7 +889,7 @@ var app = (function () {
       const { leftBorder, widthColumnMap, ratioMap } = detail;
 
       const widthColumn = 1000 / ratioMap;
-      const position = (-leftBorder * widthColumn) / widthColumnMap - 5 * widthColumnMap;
+      const position = (-leftBorder * widthColumn) / widthColumnMap + 5 * widthColumnMap;
       const newRatio = widthColumn / widthColumnMap;
 
       return { newRatio, position, column: widthColumn };
@@ -936,27 +936,27 @@ var app = (function () {
     			attr_dev(div0, "class", div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-1f02xqb");
     			set_style(div0, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
     			set_style(div0, "width", "" + (1000 - ctx.scale - ctx.leftBorder) + "px");
-    			add_location(div0, file, 226, 2, 4455);
+    			add_location(div0, file, 230, 2, 4574);
     			attr_dev(div1, "class", div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-1f02xqb");
     			set_style(div1, "transform", "translateX(" + (ctx.leftBorder - 1000) + "px)");
-    			add_location(div1, file, 229, 2, 4616);
+    			add_location(div1, file, 233, 2, 4735);
     			attr_dev(div2, "class", div2_class_value = "handle handle--" + ctx.$theme + " svelte-1f02xqb");
     			set_style(div2, "transform", "translateX(" + (ctx.leftBorder + widthBorder) + "px)");
     			set_style(div2, "width", "" + ctx.scale + "px");
-    			add_location(div2, file, 233, 2, 4726);
+    			add_location(div2, file, 237, 2, 4845);
     			attr_dev(div3, "class", div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-1f02xqb");
     			set_style(div3, "transform", "translateX(" + ctx.leftBorder + "px)");
-    			add_location(div3, file, 238, 2, 4906);
+    			add_location(div3, file, 242, 2, 5025);
     			attr_dev(div4, "class", div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-1f02xqb");
     			set_style(div4, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
-    			add_location(div4, file, 242, 2, 5059);
+    			add_location(div4, file, 246, 2, 5178);
     			attr_dev(canvas, "class", "map svelte-1f02xqb");
     			attr_dev(canvas, "width", "1000px");
     			attr_dev(canvas, "height", "50px");
     			set_style(canvas, "transform", "translateX(0px)");
-    			add_location(canvas, file, 247, 2, 5238);
+    			add_location(canvas, file, 251, 2, 5357);
     			attr_dev(div5, "class", "map-wrapper svelte-1f02xqb");
-    			add_location(div5, file, 225, 0, 4407);
+    			add_location(div5, file, 229, 0, 4526);
 
     			dispose = [
     				listen_dev(window, "mousemove", ctx.handleMoveBorder),
@@ -1068,7 +1068,7 @@ var app = (function () {
 
       const dispatch = createEventDispatcher();
 
-      let { positionChart, columnChart, xData, yData, draw } = $$props;
+      let { rightBorderMap, leftBorderMap, columnChart, xData, yData, draw } = $$props;
 
       let canvasRef;
       let mapRef;
@@ -1085,7 +1085,8 @@ var app = (function () {
       let rightBorder = leftBorder + scale + 15;
       let distance;
 
-      let ratioMap = 32;
+      let ratioMap = 34;
+
 
       onMount(() => {
         if (!canvasRef.getContext) {
@@ -1102,8 +1103,8 @@ var app = (function () {
       });
 
       const checkChartBorders = x => {
-        if (x < 0) {
-          return 0;
+        if (x < -widthBorder) {
+          return -widthBorder;
         }
         if (x + scale > 1000) {
           return 990 - scale;
@@ -1181,7 +1182,7 @@ var app = (function () {
         distance = null;
       };
 
-    	const writable_props = ['positionChart', 'columnChart', 'xData', 'yData', 'draw'];
+    	const writable_props = ['rightBorderMap', 'leftBorderMap', 'columnChart', 'xData', 'yData', 'draw'];
     	Object.keys($$props).forEach(key => {
     		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<Map> was created with unknown prop '${key}'`);
     	});
@@ -1201,7 +1202,8 @@ var app = (function () {
     	}
 
     	$$self.$set = $$props => {
-    		if ('positionChart' in $$props) $$invalidate('positionChart', positionChart = $$props.positionChart);
+    		if ('rightBorderMap' in $$props) $$invalidate('rightBorderMap', rightBorderMap = $$props.rightBorderMap);
+    		if ('leftBorderMap' in $$props) $$invalidate('leftBorderMap', leftBorderMap = $$props.leftBorderMap);
     		if ('columnChart' in $$props) $$invalidate('columnChart', columnChart = $$props.columnChart);
     		if ('xData' in $$props) $$invalidate('xData', xData = $$props.xData);
     		if ('yData' in $$props) $$invalidate('yData', yData = $$props.yData);
@@ -1209,11 +1211,12 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => {
-    		return { positionChart, columnChart, xData, yData, draw, canvasRef, mapRef, isMouseDown, isMovingRightBorder, isMovingLeftBorder, scale, offset, leftBorder, rightBorder, distance, ratioMap, $theme };
+    		return { rightBorderMap, leftBorderMap, columnChart, xData, yData, draw, canvasRef, mapRef, isMouseDown, isMovingRightBorder, isMovingLeftBorder, scale, offset, leftBorder, rightBorder, distance, ratioMap, $theme };
     	};
 
     	$$self.$inject_state = $$props => {
-    		if ('positionChart' in $$props) $$invalidate('positionChart', positionChart = $$props.positionChart);
+    		if ('rightBorderMap' in $$props) $$invalidate('rightBorderMap', rightBorderMap = $$props.rightBorderMap);
+    		if ('leftBorderMap' in $$props) $$invalidate('leftBorderMap', leftBorderMap = $$props.leftBorderMap);
     		if ('columnChart' in $$props) $$invalidate('columnChart', columnChart = $$props.columnChart);
     		if ('xData' in $$props) $$invalidate('xData', xData = $$props.xData);
     		if ('yData' in $$props) $$invalidate('yData', yData = $$props.yData);
@@ -1232,13 +1235,15 @@ var app = (function () {
     		if ('$theme' in $$props) theme.set($theme);
     	};
 
-    	$$self.$$.update = ($$dirty = { ratioMap: 1, positionChart: 1 }) => {
+    	$$self.$$.update = ($$dirty = { ratioMap: 1, leftBorderMap: 1, rightBorderMap: 1 }) => {
     		if ($$dirty.ratioMap) { $$invalidate('scale', scale = ratioMap * widthColumn); }
-    		if ($$dirty.positionChart) { $$invalidate('leftBorder', leftBorder = -positionChart || 0); }
+    		if ($$dirty.leftBorderMap) { $$invalidate('leftBorder', leftBorder = leftBorderMap + widthBorder || 0); }
+    		if ($$dirty.rightBorderMap) { rightBorder = rightBorderMap + widthBorder; }
     	};
 
     	return {
-    		positionChart,
+    		rightBorderMap,
+    		leftBorderMap,
     		columnChart,
     		xData,
     		yData,
@@ -1262,13 +1267,16 @@ var app = (function () {
     class Map$1 extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance, create_fragment, safe_not_equal, ["positionChart", "columnChart", "xData", "yData", "draw"]);
+    		init(this, options, instance, create_fragment, safe_not_equal, ["rightBorderMap", "leftBorderMap", "columnChart", "xData", "yData", "draw"]);
     		dispatch_dev("SvelteRegisterComponent", { component: this, tagName: "Map", options, id: create_fragment.name });
 
     		const { ctx } = this.$$;
     		const props = options.props || {};
-    		if (ctx.positionChart === undefined && !('positionChart' in props)) {
-    			console.warn("<Map> was created without expected prop 'positionChart'");
+    		if (ctx.rightBorderMap === undefined && !('rightBorderMap' in props)) {
+    			console.warn("<Map> was created without expected prop 'rightBorderMap'");
+    		}
+    		if (ctx.leftBorderMap === undefined && !('leftBorderMap' in props)) {
+    			console.warn("<Map> was created without expected prop 'leftBorderMap'");
     		}
     		if (ctx.columnChart === undefined && !('columnChart' in props)) {
     			console.warn("<Map> was created without expected prop 'columnChart'");
@@ -1284,11 +1292,19 @@ var app = (function () {
     		}
     	}
 
-    	get positionChart() {
+    	get rightBorderMap() {
     		throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set positionChart(value) {
+    	set rightBorderMap(value) {
+    		throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get leftBorderMap() {
+    		throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set leftBorderMap(value) {
     		throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -1337,7 +1353,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (348:4) {#if tooltip}
+    // (351:4) {#if tooltip}
     function create_if_block(ctx) {
     	var div, p, t0_value = ctx.tooltip.date + "", t0, t1, section, div_class_value;
 
@@ -1361,13 +1377,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-12bhjpd");
-    			add_location(p, file$1, 351, 8, 8105);
+    			add_location(p, file$1, 354, 8, 8220);
     			attr_dev(section, "class", "info svelte-12bhjpd");
-    			add_location(section, file$1, 352, 8, 8149);
+    			add_location(section, file$1, 355, 8, 8264);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-12bhjpd");
     			set_style(div, "top", "50px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$1, 348, 6, 7994);
+    			add_location(div, file$1, 351, 6, 8109);
     		},
 
     		m: function mount(target, anchor) {
@@ -1426,11 +1442,11 @@ var app = (function () {
     			destroy_each(each_blocks, detaching);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block.name, type: "if", source: "(348:4) {#if tooltip}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block.name, type: "if", source: "(351:4) {#if tooltip}", ctx });
     	return block;
     }
 
-    // (354:10) {#each tooltip.views as views, i}
+    // (357:10) {#each tooltip.views as views, i}
     function create_each_block(ctx) {
     	var div, t0_value = ctx.Object.keys(ctx.yData)[ctx.i] + "", t0, t1, span, t2_value = ctx.views + "", t2, t3;
 
@@ -1442,10 +1458,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$1, 356, 14, 8332);
+    			add_location(span, file$1, 359, 14, 8447);
     			attr_dev(div, "class", "views svelte-12bhjpd");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$1, 354, 12, 8230);
+    			add_location(div, file$1, 357, 12, 8345);
     		},
 
     		m: function mount(target, anchor) {
@@ -1477,7 +1493,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(354:10) {#each tooltip.views as views, i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block.name, type: "each", source: "(357:10) {#each tooltip.views as views, i}", ctx });
     	return block;
     }
 
@@ -1488,10 +1504,11 @@ var app = (function () {
 
     	var map = new Map$1({
     		props: {
-    		positionChart: ctx.positionXMap,
     		draw: ctx.drawRectangle,
     		columnChart: ctx.widthColumn,
     		xData: ctx.xData,
+    		rightBorderMap: ctx.rightBorderMap,
+    		leftBorderMap: ctx.leftBorderMap,
     		yData: ctx.yData.banans
     	},
     		$$inline: true
@@ -1522,26 +1539,26 @@ var app = (function () {
     			t9 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-12bhjpd");
-    			add_location(p0, file$1, 318, 4, 7089);
-    			add_location(p1, file$1, 319, 4, 7123);
+    			add_location(p0, file$1, 321, 4, 7204);
+    			add_location(p1, file$1, 322, 4, 7238);
     			attr_dev(div0, "class", "header svelte-12bhjpd");
-    			add_location(div0, file$1, 317, 2, 7063);
+    			add_location(div0, file$1, 320, 2, 7178);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$1, 332, 4, 7514);
+    			add_location(canvas, file$1, 335, 4, 7629);
     			attr_dev(div1, "class", div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-12bhjpd");
     			set_style(div1, "transform", "translateX(" + ctx.limit + "px)");
-    			add_location(div1, file$1, 340, 4, 7733);
+    			add_location(div1, file$1, 343, 4, 7848);
     			attr_dev(div2, "class", div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-12bhjpd");
     			set_style(div2, "transform", "translateX(" + (ctx.limit - ctx.widthColumn - 1000) + "px)");
-    			add_location(div2, file$1, 343, 4, 7841);
+    			add_location(div2, file$1, 346, 4, 7956);
     			attr_dev(div3, "class", "chart svelte-12bhjpd");
     			attr_dev(div3, "style", div3_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div3, file$1, 323, 2, 7237);
+    			add_location(div3, file$1, 326, 2, 7352);
     			attr_dev(div4, "class", "chart-one svelte-12bhjpd");
-    			add_location(div4, file$1, 316, 0, 7036);
+    			add_location(div4, file$1, 319, 0, 7151);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -1633,9 +1650,10 @@ var app = (function () {
     			}
 
     			var map_changes = {};
-    			if (changed.positionXMap) map_changes.positionChart = ctx.positionXMap;
     			if (changed.widthColumn) map_changes.columnChart = ctx.widthColumn;
     			if (changed.xData) map_changes.xData = ctx.xData;
+    			if (changed.rightBorderMap) map_changes.rightBorderMap = ctx.rightBorderMap;
+    			if (changed.leftBorderMap) map_changes.leftBorderMap = ctx.leftBorderMap;
     			if (changed.yData) map_changes.yData = ctx.yData.banans;
     			map.$set(map_changes);
     		},
@@ -1670,6 +1688,8 @@ var app = (function () {
     	return block;
     }
 
+    let positionXMap = 0;
+
     function instance$1($$self, $$props, $$invalidate) {
     	let $ratio, $theme;
 
@@ -1693,9 +1713,10 @@ var app = (function () {
       let currentPositionX = 0;
       let initialPositionX = 0;
       let isMouseDown = false;
-      let positionXMap = 0;
       let offset = 0;
       let currentColumn;
+      let rightBorderMap;
+      let leftBorderMap;
 
       const widthCanvas = xData.length * widthColumn;
       const dataArray = xData.map((val, i) => i * widthColumn);
@@ -1845,15 +1866,16 @@ var app = (function () {
 
         return position;
       };
-
+      
       const handleMouseMove = e => {
         if (isMouseDown) {
           const translate = -1 * (e.clientX - initialPositionX);
 
           $$invalidate('currentPositionX', currentPositionX = checkChartBorders(
             e.clientX,
-            translate));
-          $$invalidate('positionXMap', positionXMap = currentPositionX / $ratio);
+            translate) - 60);
+          $$invalidate('leftBorderMap', leftBorderMap = -currentPositionX / $ratio);
+          $$invalidate('rightBorderMap', rightBorderMap = (-currentPositionX + 1000) / $ratio);
           updatePositionTooltip(e);
         } else {
           renderTooltip(e);
@@ -1922,7 +1944,7 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => {
-    		return { canvasRef, chartRef, ctx, xData, yData, colors, title, widthColumn, tooltip, limit, currentPositionX, initialPositionX, isMouseDown, positionXMap, offset, currentColumn, endDay, startDay, columns, $ratio, $theme };
+    		return { canvasRef, chartRef, ctx, xData, yData, colors, title, widthColumn, tooltip, limit, currentPositionX, initialPositionX, isMouseDown, positionXMap, offset, currentColumn, rightBorderMap, leftBorderMap, endDay, startDay, columns, $ratio, $theme };
     	};
 
     	$$self.$inject_state = $$props => {
@@ -1939,9 +1961,11 @@ var app = (function () {
     		if ('currentPositionX' in $$props) $$invalidate('currentPositionX', currentPositionX = $$props.currentPositionX);
     		if ('initialPositionX' in $$props) initialPositionX = $$props.initialPositionX;
     		if ('isMouseDown' in $$props) $$invalidate('isMouseDown', isMouseDown = $$props.isMouseDown);
-    		if ('positionXMap' in $$props) $$invalidate('positionXMap', positionXMap = $$props.positionXMap);
+    		if ('positionXMap' in $$props) positionXMap = $$props.positionXMap;
     		if ('offset' in $$props) offset = $$props.offset;
     		if ('currentColumn' in $$props) currentColumn = $$props.currentColumn;
+    		if ('rightBorderMap' in $$props) $$invalidate('rightBorderMap', rightBorderMap = $$props.rightBorderMap);
+    		if ('leftBorderMap' in $$props) $$invalidate('leftBorderMap', leftBorderMap = $$props.leftBorderMap);
     		if ('endDay' in $$props) $$invalidate('endDay', endDay = $$props.endDay);
     		if ('startDay' in $$props) $$invalidate('startDay', startDay = $$props.startDay);
     		if ('columns' in $$props) columns = $$props.columns;
@@ -1971,7 +1995,8 @@ var app = (function () {
     		limit,
     		currentPositionX,
     		isMouseDown,
-    		positionXMap,
+    		rightBorderMap,
+    		leftBorderMap,
     		widthCanvas,
     		endDay,
     		startDay,
@@ -2057,7 +2082,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (349:4) {#if tooltip}
+    // (353:4) {#if tooltip}
     function create_if_block$1(ctx) {
     	var div, p, t0_value = ctx.tooltip.date + "", t0, t1, section, div_class_value;
 
@@ -2081,13 +2106,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-1hxp540");
-    			add_location(p, file$2, 352, 8, 8245);
+    			add_location(p, file$2, 356, 8, 8312);
     			attr_dev(section, "class", "info");
-    			add_location(section, file$2, 353, 8, 8289);
+    			add_location(section, file$2, 357, 8, 8356);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-1hxp540");
     			set_style(div, "top", "10px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$2, 349, 6, 8134);
+    			add_location(div, file$2, 353, 6, 8201);
     		},
 
     		m: function mount(target, anchor) {
@@ -2146,11 +2171,11 @@ var app = (function () {
     			destroy_each(each_blocks, detaching);
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(349:4) {#if tooltip}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_if_block$1.name, type: "if", source: "(353:4) {#if tooltip}", ctx });
     	return block;
     }
 
-    // (355:10) {#each tooltip.views as views, i}
+    // (359:10) {#each tooltip.views as views, i}
     function create_each_block$1(ctx) {
     	var div, t0_value = ctx.Object.keys(ctx.yData)[ctx.i] + "", t0, t1, span, t2_value = ctx.views + "", t2, t3;
 
@@ -2162,10 +2187,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$2, 357, 14, 8472);
+    			add_location(span, file$2, 361, 14, 8539);
     			attr_dev(div, "class", "views svelte-1hxp540");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$2, 355, 12, 8370);
+    			add_location(div, file$2, 359, 12, 8437);
     		},
 
     		m: function mount(target, anchor) {
@@ -2197,7 +2222,7 @@ var app = (function () {
     			}
     		}
     	};
-    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(355:10) {#each tooltip.views as views, i}", ctx });
+    	dispatch_dev("SvelteRegisterBlock", { block, id: create_each_block$1.name, type: "each", source: "(359:10) {#each tooltip.views as views, i}", ctx });
     	return block;
     }
 
@@ -2208,9 +2233,10 @@ var app = (function () {
 
     	var map = new Map$1({
     		props: {
-    		positionChart: ctx.positionXMap,
-    		columnChart: ctx.widthColumn,
     		draw: ctx.drawRectangle,
+    		columnChart: ctx.widthColumn,
+    		rightBorderMap: ctx.rightBorderMap,
+    		leftBorderMap: ctx.leftBorderMap,
     		xData: ctx.xData,
     		yData: ctx.yData
     	},
@@ -2238,20 +2264,20 @@ var app = (function () {
     			t7 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-1hxp540");
-    			add_location(p0, file$2, 326, 4, 7469);
-    			add_location(p1, file$2, 327, 4, 7503);
+    			add_location(p0, file$2, 330, 4, 7536);
+    			add_location(p1, file$2, 331, 4, 7570);
     			attr_dev(div0, "class", "header svelte-1hxp540");
-    			add_location(div0, file$2, 325, 2, 7443);
+    			add_location(div0, file$2, 329, 2, 7510);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$2, 340, 4, 7894);
+    			add_location(canvas, file$2, 344, 4, 7961);
     			attr_dev(div1, "class", "chart svelte-1hxp540");
     			attr_dev(div1, "style", div1_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div1, file$2, 331, 2, 7617);
+    			add_location(div1, file$2, 335, 2, 7684);
     			attr_dev(div2, "class", "chart-two svelte-1hxp540");
-    			add_location(div2, file$2, 324, 0, 7416);
+    			add_location(div2, file$2, 328, 0, 7483);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -2323,8 +2349,9 @@ var app = (function () {
     			}
 
     			var map_changes = {};
-    			if (changed.positionXMap) map_changes.positionChart = ctx.positionXMap;
     			if (changed.widthColumn) map_changes.columnChart = ctx.widthColumn;
+    			if (changed.rightBorderMap) map_changes.rightBorderMap = ctx.rightBorderMap;
+    			if (changed.leftBorderMap) map_changes.leftBorderMap = ctx.leftBorderMap;
     			if (changed.xData) map_changes.xData = ctx.xData;
     			if (changed.yData) map_changes.yData = ctx.yData;
     			map.$set(map_changes);
@@ -2387,6 +2414,8 @@ var app = (function () {
       let offset = 0;
       let previousIndex;
       let currentColumn;
+      let rightBorderMap;
+      let leftBorderMap;
 
       const widthCanvas = xData.length * widthColumn;
       const dataArray = xData.map((val, i) => i * widthColumn);
@@ -2414,8 +2443,6 @@ var app = (function () {
       };
 
       const drawRectangle = (ctx, h) => {
-        // const max = findMaxValue(yData);
-        // const scale = 100 / (max * dataKeys.length);
         const width = h === 5 ? widthColumn : 1000 / xData.length;
 
         for (let i = 0; i < xData.length; i++) {
@@ -2581,7 +2608,11 @@ var app = (function () {
           $$invalidate('currentPositionX', currentPositionX = checkChartBorders(
             e.clientX,
             translate));
-          $$invalidate('positionXMap', positionXMap = currentPositionX / $ratio);
+
+          positionXMap = currentPositionX / $ratio;
+          $$invalidate('leftBorderMap', leftBorderMap = -currentPositionX / $ratio);
+          $$invalidate('rightBorderMap', rightBorderMap = (-currentPositionX + 1000) / $ratio);
+
           updatePositionTooltip(e);
         } else {
           renderTooltip(e);
@@ -2651,7 +2682,7 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => {
-    		return { canvasRef, chartRef, ctx, xData, yData, colors, title, widthColumn, tooltip, limit, currentPositionX, initialPositionX, isMouseDown, positionXMap, offset, previousIndex, currentColumn, endDay, startDay, columns, $theme, $ratio };
+    		return { canvasRef, chartRef, ctx, xData, yData, colors, title, widthColumn, tooltip, limit, currentPositionX, initialPositionX, isMouseDown, positionXMap, offset, previousIndex, currentColumn, rightBorderMap, leftBorderMap, endDay, startDay, columns, $theme, $ratio };
     	};
 
     	$$self.$inject_state = $$props => {
@@ -2668,10 +2699,12 @@ var app = (function () {
     		if ('currentPositionX' in $$props) $$invalidate('currentPositionX', currentPositionX = $$props.currentPositionX);
     		if ('initialPositionX' in $$props) initialPositionX = $$props.initialPositionX;
     		if ('isMouseDown' in $$props) $$invalidate('isMouseDown', isMouseDown = $$props.isMouseDown);
-    		if ('positionXMap' in $$props) $$invalidate('positionXMap', positionXMap = $$props.positionXMap);
+    		if ('positionXMap' in $$props) positionXMap = $$props.positionXMap;
     		if ('offset' in $$props) offset = $$props.offset;
     		if ('previousIndex' in $$props) previousIndex = $$props.previousIndex;
     		if ('currentColumn' in $$props) currentColumn = $$props.currentColumn;
+    		if ('rightBorderMap' in $$props) $$invalidate('rightBorderMap', rightBorderMap = $$props.rightBorderMap);
+    		if ('leftBorderMap' in $$props) $$invalidate('leftBorderMap', leftBorderMap = $$props.leftBorderMap);
     		if ('endDay' in $$props) $$invalidate('endDay', endDay = $$props.endDay);
     		if ('startDay' in $$props) $$invalidate('startDay', startDay = $$props.startDay);
     		if ('columns' in $$props) columns = $$props.columns;
@@ -2700,7 +2733,8 @@ var app = (function () {
     		tooltip,
     		currentPositionX,
     		isMouseDown,
-    		positionXMap,
+    		rightBorderMap,
+    		leftBorderMap,
     		widthCanvas,
     		endDay,
     		startDay,

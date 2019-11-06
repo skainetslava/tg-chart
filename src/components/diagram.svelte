@@ -28,6 +28,8 @@
   let offset = 0;
   let previousIndex;
   let currentColumn;
+  let rightBorderMap;
+  let leftBorderMap;
 
   const widthCanvas = xData.length * widthColumn;
   const dataArray = xData.map((val, i) => i * widthColumn);
@@ -62,8 +64,6 @@
   };
 
   const drawRectangle = (ctx, h) => {
-    // const max = findMaxValue(yData);
-    // const scale = 100 / (max * dataKeys.length);
     const width = h === 5 ? widthColumn : 1000 / xData.length;
 
     for (let i = 0; i < xData.length; i++) {
@@ -231,7 +231,11 @@
         translate,
         widthCanvas - 1000
       );
+
       positionXMap = currentPositionX / $ratio;
+      leftBorderMap = -currentPositionX / $ratio;
+      rightBorderMap = (-currentPositionX + 1000) / $ratio;
+
       updatePositionTooltip(e);
     } else {
       renderTooltip(e);
@@ -365,11 +369,13 @@
   </div>
 
   <Map
-    positionChart={positionXMap}
     on:move={moveSlider}
     on:changeScale={handleChangeScale}
-    columnChart={widthColumn}
     draw={drawRectangle}
+    columnChart={widthColumn}
+    {rightBorderMap}
+    {leftBorderMap}
     {xData}
     {yData} />
+
 </div>
