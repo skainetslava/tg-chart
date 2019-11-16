@@ -112,9 +112,9 @@
     }
 
     if (isMovingRightBorder) {
-      rightBorder = checkRightSlider(e.clientX - offset);
+      rightBorder = checkRightSlider(e.clientX - offset - 6);
     } else {
-      leftBorder = checkLeftSlider(e.clientX - offset);
+      leftBorder = checkLeftSlider(e.clientX - offset + 6);
     }
 
     ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn;

@@ -936,27 +936,27 @@ var app = (function () {
     			attr_dev(div0, "class", div0_class_value = "mask mask--" + ctx.$theme + " right" + " svelte-1f02xqb");
     			set_style(div0, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
     			set_style(div0, "width", "" + (1000 - ctx.scale - ctx.leftBorder) + "px");
-    			add_location(div0, file, 230, 2, 4574);
+    			add_location(div0, file, 230, 2, 4582);
     			attr_dev(div1, "class", div1_class_value = "mask mask--" + ctx.$theme + " left" + " svelte-1f02xqb");
     			set_style(div1, "transform", "translateX(" + (ctx.leftBorder - 1000) + "px)");
-    			add_location(div1, file, 233, 2, 4735);
+    			add_location(div1, file, 233, 2, 4743);
     			attr_dev(div2, "class", div2_class_value = "handle handle--" + ctx.$theme + " svelte-1f02xqb");
     			set_style(div2, "transform", "translateX(" + (ctx.leftBorder + widthBorder) + "px)");
     			set_style(div2, "width", "" + ctx.scale + "px");
-    			add_location(div2, file, 237, 2, 4845);
+    			add_location(div2, file, 237, 2, 4853);
     			attr_dev(div3, "class", div3_class_value = "border border--" + ctx.$theme + " border_left" + " svelte-1f02xqb");
     			set_style(div3, "transform", "translateX(" + ctx.leftBorder + "px)");
-    			add_location(div3, file, 242, 2, 5025);
+    			add_location(div3, file, 242, 2, 5033);
     			attr_dev(div4, "class", div4_class_value = "border border--" + ctx.$theme + " border_right" + " svelte-1f02xqb");
     			set_style(div4, "transform", "translateX(" + (ctx.leftBorder + ctx.scale + widthBorder) + "px)");
-    			add_location(div4, file, 246, 2, 5178);
+    			add_location(div4, file, 246, 2, 5186);
     			attr_dev(canvas, "class", "map svelte-1f02xqb");
     			attr_dev(canvas, "width", "1000px");
     			attr_dev(canvas, "height", "50px");
     			set_style(canvas, "transform", "translateX(0px)");
-    			add_location(canvas, file, 251, 2, 5357);
+    			add_location(canvas, file, 251, 2, 5365);
     			attr_dev(div5, "class", "map-wrapper svelte-1f02xqb");
-    			add_location(div5, file, 229, 0, 4526);
+    			add_location(div5, file, 229, 0, 4534);
 
     			dispose = [
     				listen_dev(window, "mousemove", ctx.handleMoveBorder),
@@ -1162,9 +1162,9 @@ var app = (function () {
         }
 
         if (isMovingRightBorder) {
-          rightBorder = checkRightSlider(e.clientX - offset);
+          rightBorder = checkRightSlider(e.clientX - offset - 6);
         } else {
-          $$invalidate('leftBorder', leftBorder = checkLeftSlider(e.clientX - offset));
+          $$invalidate('leftBorder', leftBorder = checkLeftSlider(e.clientX - offset + 6));
         }
 
         $$invalidate('ratioMap', ratioMap = (rightBorder - widthBorder - leftBorder) / widthColumn);
@@ -1377,13 +1377,13 @@ var app = (function () {
     				each_blocks[i].c();
     			}
     			attr_dev(p, "class", "date svelte-12bhjpd");
-    			add_location(p, file$1, 354, 8, 8220);
+    			add_location(p, file$1, 354, 8, 8215);
     			attr_dev(section, "class", "info svelte-12bhjpd");
-    			add_location(section, file$1, 355, 8, 8264);
+    			add_location(section, file$1, 355, 8, 8259);
     			attr_dev(div, "class", div_class_value = "tooltip tooltip--" + ctx.$theme + " svelte-12bhjpd");
     			set_style(div, "top", "50px");
     			set_style(div, "left", "" + (ctx.tooltip.x - 65) + "px");
-    			add_location(div, file$1, 351, 6, 8109);
+    			add_location(div, file$1, 351, 6, 8104);
     		},
 
     		m: function mount(target, anchor) {
@@ -1458,10 +1458,10 @@ var app = (function () {
     			span = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			add_location(span, file$1, 359, 14, 8447);
+    			add_location(span, file$1, 359, 14, 8442);
     			attr_dev(div, "class", "views svelte-12bhjpd");
     			set_style(div, "color", ctx.colors[ctx.i]);
-    			add_location(div, file$1, 357, 12, 8345);
+    			add_location(div, file$1, 357, 12, 8340);
     		},
 
     		m: function mount(target, anchor) {
@@ -1539,26 +1539,26 @@ var app = (function () {
     			t9 = space();
     			map.$$.fragment.c();
     			attr_dev(p0, "class", "title svelte-12bhjpd");
-    			add_location(p0, file$1, 321, 4, 7204);
-    			add_location(p1, file$1, 322, 4, 7238);
+    			add_location(p0, file$1, 321, 4, 7199);
+    			add_location(p1, file$1, 322, 4, 7233);
     			attr_dev(div0, "class", "header svelte-12bhjpd");
-    			add_location(div0, file$1, 320, 2, 7178);
+    			add_location(div0, file$1, 320, 2, 7173);
     			attr_dev(canvas, "class", "cnvs");
     			attr_dev(canvas, "width", ctx.widthCanvas * 3);
     			attr_dev(canvas, "height", "504px");
     			set_style(canvas, "transform", "translateX(" + ctx.currentPositionX + "px)");
-    			add_location(canvas, file$1, 335, 4, 7629);
+    			add_location(canvas, file$1, 335, 4, 7624);
     			attr_dev(div1, "class", div1_class_value = "wrapper wrapper--" + ctx.$theme + " left" + " svelte-12bhjpd");
     			set_style(div1, "transform", "translateX(" + ctx.limit + "px)");
-    			add_location(div1, file$1, 343, 4, 7848);
+    			add_location(div1, file$1, 343, 4, 7843);
     			attr_dev(div2, "class", div2_class_value = "wrapper wrapper--" + ctx.$theme + " right" + " svelte-12bhjpd");
     			set_style(div2, "transform", "translateX(" + (ctx.limit - ctx.widthColumn - 1000) + "px)");
-    			add_location(div2, file$1, 346, 4, 7956);
+    			add_location(div2, file$1, 346, 4, 7951);
     			attr_dev(div3, "class", "chart svelte-12bhjpd");
     			attr_dev(div3, "style", div3_style_value = ctx.isMouseDown ? 'cursor: grabbing' : 'cursor: grab');
-    			add_location(div3, file$1, 326, 2, 7352);
+    			add_location(div3, file$1, 326, 2, 7347);
     			attr_dev(div4, "class", "chart-one svelte-12bhjpd");
-    			add_location(div4, file$1, 319, 0, 7151);
+    			add_location(div4, file$1, 319, 0, 7146);
 
     			dispose = [
     				listen_dev(canvas, "mouseover", ctx.handleMouseEnter),
@@ -1873,7 +1873,7 @@ var app = (function () {
 
           $$invalidate('currentPositionX', currentPositionX = checkChartBorders(
             e.clientX,
-            translate) - 60);
+            translate));
           $$invalidate('leftBorderMap', leftBorderMap = -currentPositionX / $ratio);
           $$invalidate('rightBorderMap', rightBorderMap = (-currentPositionX + 1000) / $ratio);
           updatePositionTooltip(e);

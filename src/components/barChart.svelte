@@ -194,7 +194,7 @@
         e.clientX,
         translate,
         widthCanvas - 1000
-      ) - 60;
+      );
       leftBorderMap = -currentPositionX / $ratio;
       rightBorderMap = (-currentPositionX + 1000) / $ratio;
       updatePositionTooltip(e);
